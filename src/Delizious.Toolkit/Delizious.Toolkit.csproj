@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Authors>Oliver Zick</Authors>
+    <Copyright>Copyright © 2020 Oliver Zick. All rights reserved.</Copyright>
+    <RepositoryUrl>https://github.com/oliverzick/Delizious-Toolkit</RepositoryUrl>
+    <RootNamespace>Delizious</RootNamespace>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>0</WarningLevel>
+    <OutputPath>bin\Debug</OutputPath>
+    <DocumentationFile>bin\Debug\Delizious.Toolkit.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>bin\Release</OutputPath>
+    <DocumentationFile>bin\Release\Delizious.Toolkit.xml</DocumentationFile>
+  </PropertyGroup>
+
+</Project>
