@@ -15,5 +15,17 @@ namespace Delizious.Toolkit.Test
 
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [InlineData(false, false)]
+        [InlineData(false, true)]
+        public void Never(bool expected, bool value)
+        {
+            var subject = Match.Never<bool>();
+
+            var actual = subject.Matches(value);
+
+            Assert.Equal(expected, actual);
+        }
     }
 }

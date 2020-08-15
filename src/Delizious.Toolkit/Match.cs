@@ -17,6 +17,18 @@
         public static Match<T> Always<T>()
             => Match<T>.Create(PredefinedMatch<T>.Always());
 
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that never matches successfully regardless the value to match.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the value to match.
+        /// </typeparam>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that never matches successfully.
+        /// </returns>
+        public static Match<T> Never<T>()
+            => Match<T>.Create(PredefinedMatch<T>.Never());
+
         private sealed class PredefinedMatch<T> : IMatch<T>
         {
             private readonly bool matches;
@@ -28,6 +40,9 @@
 
             public static PredefinedMatch<T> Always()
                 => new PredefinedMatch<T>(true);
+
+            public static IMatch<T> Never()
+                => new PredefinedMatch<T>(false);
 
             public bool Matches(T value)
                 => this.matches;
