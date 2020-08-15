@@ -11,10 +11,13 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <WarningLevel>0</WarningLevel>
+    <OutputPath>bin\Debug</OutputPath>
+    <DocumentationFile>bin\Debug\Delizious.Toolkit.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
+    <OutputPath>bin\Release</OutputPath>
+    <DocumentationFile>bin\Release\Delizious.Toolkit.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>
