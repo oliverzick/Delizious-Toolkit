@@ -47,6 +47,32 @@
             public bool Matches(T value)
                 => this.matches;
         }
+
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is a <c>null</c> reference.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the value to match. This must be a reference type.
+        /// </typeparam>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that determines whether the value to match is a <c>null</c> reference.
+        /// </returns>
+        public static Match<T> Null<T>() where T : class
+            => Match<T>.Create(NullMatch<T>.Create());
+
+        private sealed class NullMatch<T> : IMatch<T>
+            where T : class
+        {
+            private NullMatch()
+            {
+            }
+
+            public static NullMatch<T> Create()
+                => new NullMatch<T>();
+
+            public bool Matches(T value)
+                => ReferenceEquals(value, null);
+        }
     }
 
     /// <summary>

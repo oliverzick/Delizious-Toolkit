@@ -8,3 +8,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Enable match that matches always (#1)
 - Enable match that matches never (#3)
+- Enable match that matches null references (#5)
