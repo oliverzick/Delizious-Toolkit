@@ -27,5 +27,18 @@ namespace Delizious.Toolkit.Test
 
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [InlineData(true, null)]
+        [InlineData(false, "")]
+        [InlineData(false, "Sample string")]
+        public void Null(bool expected, string value)
+        {
+            var subject = Match.Null<string>();
+
+            var actual = subject.Matches(value);
+
+            Assert.Equal(expected, actual);
+        }
     }
 }
