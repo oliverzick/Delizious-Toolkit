@@ -1,4 +1,4 @@
-namespace Delizious.Toolkit.Test
+namespace Delizious
 {
     using Xunit;
 
