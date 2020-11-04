@@ -141,7 +141,7 @@
         /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match does not equal the specified <paramref name="reference"/> value.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// <para><paramref name="reference"/> is <c>null</c>.</para>
+        /// <para><paramref name="reference"/> is <c>null</c>. When matching an instance to be a non-<c>null</c> reference use <see cref="NotNull{T}"/> instead.</para>
         /// <para>- or -</para>
         /// <para><paramref name="equalityComparer"/> is <c>null</c>.</para>
         /// </exception>
@@ -176,6 +176,48 @@
 
             public bool Matches(T value)
                 => this.equalityComparer.Equals(this.reference, value);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is the same instance as the specified <paramref name="reference"/> value.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the value to match. This must be a reference type.
+        /// </typeparam>
+        /// <param name="reference">
+        /// The instance a value to match must be the same to match successfully.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that matches successfully when the value to match is the same instance as the specified <paramref name="reference"/> value.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="reference"/> is <c>null</c>. When matching an instance to be a <c>null</c> reference use <see cref="Null{T}"/> instead.
+        /// </exception>
+        public static Match<T> Same<T>([NotNull] T reference) where T : class
+        {
+            if (ReferenceEquals(reference, null))
+            {
+                throw new ArgumentNullException(nameof(reference));
+            }
+
+            return Match<T>.Create(SameMatch<T>.Create(reference));
+        }
+
+        private sealed class SameMatch<T> : IMatch<T>
+            where T : class
+        {
+            private readonly T reference;
+
+            private SameMatch(T reference)
+            {
+                this.reference = reference;
+            }
+
+            public static SameMatch<T> Create(T reference)
+                => new SameMatch<T>(reference);
+
+            public bool Matches(T value)
+                => ReferenceEquals(this.reference, value);
         }
 
         private sealed class NotMatch<T> : IMatch<T>
