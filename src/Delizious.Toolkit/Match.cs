@@ -141,7 +141,7 @@
         /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match does not equal the specified <paramref name="reference"/> value.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// <para><paramref name="reference"/> is <c>null</c>.</para>
+        /// <para><paramref name="reference"/> is <c>null</c>. When matching an instance to be a non-<c>null</c> reference use <see cref="NotNull{T}"/> instead.</para>
         /// <para>- or -</para>
         /// <para><paramref name="equalityComparer"/> is <c>null</c>.</para>
         /// </exception>
