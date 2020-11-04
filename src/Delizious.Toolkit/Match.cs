@@ -125,24 +125,6 @@
             return Match<T>.Create(EqualityMatch<T>.Create(reference, equalityComparer));
         }
 
-        private sealed class EqualityMatch<T> : IMatch<T>
-        {
-            private readonly T reference;
-            private readonly IEqualityComparer<T> equalityComparer;
-
-            private EqualityMatch(T reference, IEqualityComparer<T> equalityComparer)
-            {
-                this.reference = reference;
-                this.equalityComparer = equalityComparer;
-            }
-
-            public static EqualityMatch<T> Create(T reference, IEqualityComparer<T> equalityComparer)
-                => new EqualityMatch<T>(reference, equalityComparer);
-
-            public bool Matches(T value)
-                => this.equalityComparer.Equals(this.reference, value);
-        }
-
         /// <summary>
         /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match does not equal the specified <paramref name="reference"/> value.
         /// </summary>
@@ -176,6 +158,24 @@
             }
 
             return Match<T>.Create(NotMatch<T>.Create(EqualityMatch<T>.Create(reference, equalityComparer)));
+        }
+
+        private sealed class EqualityMatch<T> : IMatch<T>
+        {
+            private readonly T reference;
+            private readonly IEqualityComparer<T> equalityComparer;
+
+            private EqualityMatch(T reference, IEqualityComparer<T> equalityComparer)
+            {
+                this.reference = reference;
+                this.equalityComparer = equalityComparer;
+            }
+
+            public static EqualityMatch<T> Create(T reference, IEqualityComparer<T> equalityComparer)
+                => new EqualityMatch<T>(reference, equalityComparer);
+
+            public bool Matches(T value)
+                => this.equalityComparer.Equals(this.reference, value);
         }
 
         private sealed class NotMatch<T> : IMatch<T>
