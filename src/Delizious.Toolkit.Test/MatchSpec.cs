@@ -144,6 +144,36 @@ namespace Delizious
             }
         }
 
+        public sealed class Same
+        {
+            [Fact]
+            public void Throws_exception_when_reference_value_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.Same<object>(null!));
+            }
+
+            [Theory]
+            [MemberData(nameof(MatchesTheories))]
+            public void Matches(bool expected, object reference, object value)
+            {
+                var subject = Match.Same(reference);
+
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+
+            public static IEnumerable<object[]> MatchesTheories()
+            {
+                var instance1 = new object();
+                var instance2 = new object();
+
+                yield return DataTheory(true, instance1, instance1);
+                yield return DataTheory(true, instance2, instance2);
+                yield return DataTheory(false, instance1, instance2);
+            }
+        }
+
         private static object[] DataTheory(params object[] values)
             => values;
     }
