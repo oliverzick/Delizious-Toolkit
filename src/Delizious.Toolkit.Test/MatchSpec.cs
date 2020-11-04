@@ -52,6 +52,22 @@ namespace Delizious
             }
         }
 
+        public sealed class NotNull
+        {
+            [Theory]
+            [InlineData(false, null)]
+            [InlineData(true, "")]
+            [InlineData(true, "Sample string")]
+            public void Matches(bool expected, string value)
+            {
+                var subject = Match.NotNull<string>();
+
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+        }
+
         public sealed class Equal
         {
             [Fact]
