@@ -10,3 +10,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable match that matches never (#3)
 - Enable match that matches null references (#5)
 - Enable match that matches equality using an equality comparer (#7)
+- Enable match that matches inequality using an equality comparer (#9)

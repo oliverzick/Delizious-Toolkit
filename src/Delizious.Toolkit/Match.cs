@@ -130,6 +130,57 @@
             public bool Matches(T value)
                 => this.equalityComparer.Equals(this.reference, value);
         }
+
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match does not equal the specified <paramref name="reference"/> value.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the value to match.
+        /// </typeparam>
+        /// <param name="reference">
+        /// The reference value a value to match must not equal to match successfully.
+        /// </param>
+        /// <param name="equalityComparer">
+        /// The <see cref="IEqualityComparer{T}"/> to determine whether a value to match and the <paramref name="reference"/> value are equal.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that determines whether a value to match does not equal the specified <paramref name="reference"/> value.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para><paramref name="reference"/> is <c>null</c>.</para>
+        /// <para>- or -</para>
+        /// <para><paramref name="equalityComparer"/> is <c>null</c>.</para>
+        /// </exception>
+        public static Match<T> NotEqual<T>([NotNull] T reference, [NotNull] IEqualityComparer<T> equalityComparer)
+        {
+            if (ReferenceEquals(reference, null))
+            {
+                throw new ArgumentNullException(nameof(reference));
+            }
+
+            if (ReferenceEquals(equalityComparer, null))
+            {
+                throw new ArgumentNullException(nameof(equalityComparer));
+            }
+
+            return Match<T>.Create(NotMatch<T>.Create(EqualityMatch<T>.Create(reference, equalityComparer)));
+        }
+
+        private sealed class NotMatch<T> : IMatch<T>
+        {
+            private readonly IMatch<T> match;
+
+            private NotMatch(IMatch<T> match)
+            {
+                this.match = match;
+            }
+
+            public static NotMatch<T> Create(IMatch<T> match)
+                => new NotMatch<T>(match);
+
+            public bool Matches(T value)
+                => !this.match.Matches(value);
+        }
     }
 
     /// <summary>
