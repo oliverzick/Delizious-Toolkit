@@ -14,3 +14,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable match that matches inequality using an equality comparer (#9)
 - Enable match that matches same instances (#13)
 - Enable match that matches different instances (#15)
+- Enable match that matches when a value is greater than a given reference value (#17)
