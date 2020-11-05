@@ -209,13 +209,13 @@ namespace Delizious
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
             {
-                Assert.Throws<ArgumentNullException>(() => Match.GreaterThan<string>(null!, Comparer<string>.Default));
+                Assert.Throws<ArgumentNullException>(() => Match.GreaterThan(null!, Comparer<string>.Default));
             }
 
             [Fact]
             public void Throws_exception_when_comparer_is_null()
             {
-                Assert.Throws<ArgumentNullException>(() => Match.GreaterThan<string>(string.Empty, null!));
+                Assert.Throws<ArgumentNullException>(() => Match.GreaterThan(string.Empty, null!));
             }
 
             [Theory]
