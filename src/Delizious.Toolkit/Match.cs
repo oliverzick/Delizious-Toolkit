@@ -245,6 +245,68 @@
                 => ReferenceEquals(this.reference, value);
         }
 
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is greater than the specified <paramref name="reference"/> value.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the value to match.
+        /// </typeparam>
+        /// <param name="reference">
+        /// The instance a value to match must be greater than to match successfully.
+        /// </param>
+        /// <param name="comparer">
+        /// The <see cref="IComparer{T}"/> instance to determine whether a value to match is greater than the specified <paramref name="reference"/> value.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that matches successfully when the value to match is greater than the specified <paramref name="reference"/> value.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para><paramref name="reference"/> is <c>null</c>.</para>
+        /// <para>- or -</para>
+        /// <para><paramref name="comparer"/> is <c>null</c>.</para>
+        /// </exception>
+        public static Match<T> GreaterThan<T>([NotNull] T reference, [NotNull] IComparer<T> comparer)
+        {
+            if (ReferenceEquals(reference, null))
+            {
+                throw new ArgumentNullException(nameof(reference));
+            }
+
+            if (ReferenceEquals(comparer, null))
+            {
+                throw new ArgumentNullException(nameof(comparer));
+            }
+
+            return Match<T>.Create(CompareMatch<T>.GreaterThan(reference, comparer));
+        }
+
+        private sealed class CompareMatch<T> : IMatch<T>
+        {
+            private delegate bool Comparison(T left, T right, IComparer<T> comparer);
+
+            private readonly T reference;
+
+            private readonly IComparer<T> comparer;
+
+            private readonly Comparison comparison;
+
+            private CompareMatch(T reference, IComparer<T> comparer, Comparison comparison)
+            {
+                this.reference = reference;
+                this.comparer = comparer;
+                this.comparison = comparison;
+            }
+
+            public static CompareMatch<T> GreaterThan(T reference, IComparer<T> comparer)
+                => new CompareMatch<T>(reference, comparer, GreaterThanComparison);
+
+            private static bool GreaterThanComparison(T left, T right, IComparer<T> comparer)
+                => comparer.Compare(left, right) > 0;
+
+            public bool Matches(T value)
+                => this.comparison(value, this.reference, this.comparer);
+        }
+
         private sealed class NotMatch<T> : IMatch<T>
         {
             private readonly IMatch<T> match;
