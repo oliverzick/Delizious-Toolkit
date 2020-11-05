@@ -13,5 +13,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable match that matches when a value equals a given reference value using an equality comparer (#7)
 - Enable match that matches when a value does not equal a given reference value using an equality comparer (#9)
 - Enable match that matches when a value is the same as a given reference value (#13)
-- Enable match that matches different instances (#15)
+- Enable match that matches when a value is not the same as a given reference value (#15)
 - Enable match that matches when a value is greater than a given reference value (#17)
