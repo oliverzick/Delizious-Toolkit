@@ -203,6 +203,31 @@
             return Match<T>.Create(SameMatch<T>.Create(reference));
         }
 
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is not the same instance as the specified <paramref name="reference"/> value.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the value to match. This must be a reference type.
+        /// </typeparam>
+        /// <param name="reference">
+        /// The instance a value to match must not be the same to match successfully.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that matches successfully when the value to match is not the same instance as the specified <paramref name="reference"/> value.
+        /// </returns
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="reference"/> is <c>null</c>. When matching an instance to be a non-<c>null</c> reference use <see cref="NotNull{T}"/> instead.
+        /// </exception>
+        public static Match<T> NotSame<T>([NotNull] T reference) where T : class
+        {
+            if (ReferenceEquals(reference, null))
+            {
+                throw new ArgumentNullException(nameof(reference));
+            }
+
+            return Match<T>.Create(NotMatch<T>.Create(SameMatch<T>.Create(reference)));
+        }
+
         private sealed class SameMatch<T> : IMatch<T>
             where T : class
         {
