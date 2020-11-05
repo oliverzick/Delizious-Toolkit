@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Enable match that matches always (#1)
 - Enable match that matches never (#3)
-- Enable match that matches null references (#5)
+- Enable match that matches when a value is null (#5)
 - Enable match that matches non-null references (#11)
 - Enable match that matches when a value equals a given reference value using an equality comparer (#7)
 - Enable match that matches when a value does not equal a given reference value using an equality comparer (#9)
