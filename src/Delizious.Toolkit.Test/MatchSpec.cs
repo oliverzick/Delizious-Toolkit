@@ -237,6 +237,39 @@ namespace Delizious
             }
         }
 
+        public sealed class GreaterThanOrEqualTo
+        {
+            [Fact]
+            public void Throws_exception_when_reference_value_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.GreaterThanOrEqualTo(null!, Comparer<string>.Default));
+            }
+
+            [Fact]
+            public void Throws_exception_when_comparer_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.GreaterThanOrEqualTo(string.Empty, null!));
+            }
+
+            [Theory]
+            [MemberData(nameof(MatchesTheories))]
+            public void Matches(bool expected, string value, string reference, IComparer<string> comparer)
+            {
+                var subject = Match.GreaterThanOrEqualTo(reference, comparer);
+
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+
+            public static IEnumerable<object[]> MatchesTheories()
+            {
+                yield return DataTheory(false, "A", "B", StringComparer.Ordinal);
+                yield return DataTheory(true, "B", "A", StringComparer.Ordinal);
+                yield return DataTheory(true, "A", "A", StringComparer.Ordinal);
+            }
+        }
+
         private static object[] DataTheory(params object[] values)
             => values;
     }
