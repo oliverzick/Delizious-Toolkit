@@ -108,7 +108,7 @@ namespace Delizious
                 }
 
                 [Fact]
-                public void Throws_exception_when_equality_comparer_is_null()
+                public void Throws_exception_when_comparer_is_null()
                 {
                     Assert.Throws<ArgumentNullException>(() => Match.Equal(string.Empty, (null as IComparer<string>)!));
                 }
