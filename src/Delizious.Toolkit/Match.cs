@@ -281,6 +281,41 @@
         }
 
         /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match does not equal the specified <paramref name="reference"/> value.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the value to match.
+        /// </typeparam>
+        /// <param name="reference">
+        /// The reference value a value to match must not equal to match successfully.
+        /// </param>
+        /// <param name="comparer">
+        /// The <see cref="IComparer{T}"/> to determine whether a value to match and the <paramref name="reference"/> value are equal.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match does not equal the specified <paramref name="reference"/> value.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para><paramref name="reference"/> is <c>null</c>. When matching an instance to be a non-<c>null</c> reference use <see cref="NotNull{T}"/> instead.</para>
+        /// <para>- or -</para>
+        /// <para><paramref name="comparer"/> is <c>null</c>.</para>
+        /// </exception>
+        public static Match<T> NotEqual<T>([NotNull] T reference, [NotNull] IComparer<T> comparer)
+        {
+            if (ReferenceEquals(reference, null))
+            {
+                throw new ArgumentNullException(nameof(reference));
+            }
+
+            if (ReferenceEquals(comparer, null))
+            {
+                throw new ArgumentNullException(nameof(comparer));
+            }
+
+            return Match<T>.Create(NotMatch<T>.Create(CompareMatch<T>.Equal(reference, comparer)));
+        }
+
+        /// <summary>
         /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is greater than the specified <paramref name="reference"/> value.
         /// </summary>
         /// <typeparam name="T">
