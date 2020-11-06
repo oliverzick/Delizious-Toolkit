@@ -70,30 +70,65 @@ namespace Delizious
 
         public sealed class Equal
         {
-            [Fact]
-            public void Throws_exception_when_reference_value_is_null()
+            public sealed class EqualityComparer
             {
-                Assert.Throws<ArgumentNullException>(() => Match.Equal(null, EqualityComparer<string>.Default));
+                [Fact]
+                public void Throws_exception_when_reference_value_is_null()
+                {
+                    Assert.Throws<ArgumentNullException>(() => Match.Equal(null, EqualityComparer<string>.Default));
+                }
+
+                [Fact]
+                public void Throws_exception_when_equality_comparer_is_null()
+                {
+                    Assert.Throws<ArgumentNullException>(() => Match.Equal(string.Empty, (null as IEqualityComparer<string>)!));
+                }
+
+                [Theory]
+                [MemberData(nameof(MatchesTheories))]
+                public void Matches(bool expected, string reference, string value, IEqualityComparer<string> equalityComparer)
+                {
+                    var subject = Match.Equal(reference, equalityComparer);
+
+                    var actual = subject.Matches(value);
+
+                    Assert.Equal(expected, actual);
+                }
+
+                public static IEnumerable<object[]> MatchesTheories()
+                    => Equal.CommonMatchesTheories();
             }
 
-            [Fact]
-            public void Throws_exception_when_equality_comparer_is_null()
+            public sealed class Comparer
             {
-                Assert.Throws<ArgumentNullException>(() => Match.Equal(string.Empty, null!));
+                [Fact]
+                public void Throws_exception_when_reference_value_is_null()
+                {
+                    Assert.Throws<ArgumentNullException>(() => Match.Equal(null, Comparer<string>.Default));
+                }
+
+                [Fact]
+                public void Throws_exception_when_equality_comparer_is_null()
+                {
+                    Assert.Throws<ArgumentNullException>(() => Match.Equal(string.Empty, (null as IComparer<string>)!));
+                }
+
+                [Theory]
+                [MemberData(nameof(MatchesTheories))]
+                public void Matches(bool expected, string reference, string value, IComparer<string> comparer)
+                {
+                    var subject = Match.Equal(reference, comparer);
+
+                    var actual = subject.Matches(value);
+
+                    Assert.Equal(expected, actual);
+                }
+
+                public static IEnumerable<object[]> MatchesTheories()
+                    => Equal.CommonMatchesTheories();
             }
 
-            [Theory]
-            [MemberData(nameof(MatchesTheories))]
-            public void Matches(bool expected, string reference, string value, IEqualityComparer<string> equalityComparer)
-            {
-                var subject = Match.Equal(reference, equalityComparer);
-
-                var actual = subject.Matches(value);
-
-                Assert.Equal(expected, actual);
-            }
-
-            public static IEnumerable<object[]> MatchesTheories()
+            private static IEnumerable<object[]> CommonMatchesTheories()
             {
                 yield return DataTheory(true, "", "", StringComparer.Ordinal);
                 yield return DataTheory(true, "Test", "Test", StringComparer.Ordinal);
