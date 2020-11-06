@@ -246,6 +246,41 @@
         }
 
         /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match equals the specified <paramref name="reference"/> value.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the value to match.
+        /// </typeparam>
+        /// <param name="reference">
+        /// The reference value a value to match must equal to match successfully.
+        /// </param>
+        /// <param name="comparer">
+        /// The <see cref="IComparer{T}"/> instance to determine whether a value to match equals the specified <paramref name="reference"/> value.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match equals the specified <paramref name="reference"/> value.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para><paramref name="reference"/> is <c>null</c>.</para>
+        /// <para>- or -</para>
+        /// <para><paramref name="comparer"/> is <c>null</c>.</para>
+        /// </exception>
+        public static Match<T> Equal<T>([NotNull] T reference, [NotNull] IComparer<T> comparer)
+        {
+            if (ReferenceEquals(reference, null))
+            {
+                throw new ArgumentNullException(nameof(reference));
+            }
+
+            if (ReferenceEquals(comparer, null))
+            {
+                throw new ArgumentNullException(nameof(comparer));
+            }
+
+            return Match<T>.Create(CompareMatch<T>.Equal(reference, comparer));
+        }
+
+        /// <summary>
         /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is greater than the specified <paramref name="reference"/> value.
         /// </summary>
         /// <typeparam name="T">
@@ -401,6 +436,12 @@
                 this.comparer = comparer;
                 this.comparison = comparison;
             }
+
+            public static CompareMatch<T> Equal(T reference, IComparer<T> comparer)
+                => new CompareMatch<T>(reference, comparer, EqualComparison);
+
+            private static bool EqualComparison(T left, T right, IComparer<T> comparer)
+                => comparer.Compare(left, right) == 0;
 
             public static CompareMatch<T> GreaterThan(T reference, IComparer<T> comparer)
                 => new CompareMatch<T>(reference, comparer, GreaterThanComparison);
