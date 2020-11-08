@@ -20,3 +20,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable match that matches when a value is greater than or equal to a given reference value using a comparer (#19)
 - Enable match that matches when a value is less than a given reference value using a comparer (#21)
 - Enable match that matches when a value is less than or equal to a given reference value using a comparer (#23)
+- Enable `All` match (#29)

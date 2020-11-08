@@ -406,7 +406,44 @@ namespace Delizious
             }
         }
 
+        public sealed class All
+        {
+            [Fact]
+            public void Throws_exception_when_matches_are_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.All<int>((null!)));
+            }
+
+            [Fact]
+            public void Throws_exception_when_matches_contain_null()
+            {
+                Assert.Throws<ArgumentException>(() => Match.All<int>(Match.Always<int>(), null!, Match.Never<int>()));
+            }
+
+            [Theory]
+            [MemberData(nameof(MatchesTheories))]
+            public void Matches(bool expected, string value, Match<string>[] matches)
+            {
+                var subject = Match.All(matches);
+
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+
+            public static IEnumerable<object[]> MatchesTheories()
+            {
+                yield return DataTheory(true, string.Empty, MakeMatches(Match.Always<string>(), Match.Always<string>(), Match.Always<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Never<string>(), Match.Always<string>()));
+                yield return DataTheory(true, "A", MakeMatches(Match.Always<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Always<string>()));
+                yield return DataTheory(false, "B", MakeMatches(Match.Always<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Always<string>()));
+            }
+        }
+
         private static object[] DataTheory(params object[] values)
             => values;
+
+        private static Match<T>[] MakeMatches<T>(params Match<T>[] matches)
+            => matches;
     }
 }
