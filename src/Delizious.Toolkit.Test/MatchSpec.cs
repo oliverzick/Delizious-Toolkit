@@ -487,6 +487,86 @@ namespace Delizious
             }
         }
 
+        public sealed class None
+        {
+            [Fact]
+            public void Throws_exception_when_matches_are_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.None<int>((null!)));
+            }
+
+            [Fact]
+            public void Throws_exception_when_matches_contain_null()
+            {
+                Assert.Throws<ArgumentException>(() => Match.None(Match.Always<int>(), null!, Match.Never<int>()));
+            }
+
+            [Theory]
+            [MemberData(nameof(MatchesTheories))]
+            public void Matches(bool expected, string value, Match<string>[] matches)
+            {
+                var subject = Match.None(matches);
+
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+
+            public static IEnumerable<object[]> MatchesTheories()
+            {
+                yield return DataTheory(true, string.Empty, MakeMatches(Match.Never<string>(), Match.Never<string>(), Match.Never<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Never<string>(), Match.Never<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Never<string>(), Match.Always<string>(), Match.Never<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Never<string>(), Match.Never<string>(), Match.Always<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Always<string>(), Match.Never<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Never<string>(), Match.Always<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Never<string>(), Match.Always<string>(), Match.Always<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Always<string>(), Match.Always<string>()));
+                yield return DataTheory(false, "A", MakeMatches(Match.Never<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Never<string>()));
+                yield return DataTheory(true, "B", MakeMatches(Match.Never<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Never<string>()));
+            }
+        }
+
+        public sealed class Except
+        {
+            [Fact]
+            public void Throws_exception_when_matches_are_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.Except<int>((null!)));
+            }
+
+            [Fact]
+            public void Throws_exception_when_matches_contain_null()
+            {
+                Assert.Throws<ArgumentException>(() => Match.Except(Match.Always<int>(), null!, Match.Never<int>()));
+            }
+
+            [Theory]
+            [MemberData(nameof(MatchesTheories))]
+            public void Matches(bool expected, string value, Match<string>[] matches)
+            {
+                var subject = Match.Except(matches);
+
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+
+            public static IEnumerable<object[]> MatchesTheories()
+            {
+                yield return DataTheory(true, string.Empty, MakeMatches(Match.Never<string>(), Match.Never<string>(), Match.Never<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Never<string>(), Match.Never<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Never<string>(), Match.Always<string>(), Match.Never<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Never<string>(), Match.Never<string>(), Match.Always<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Always<string>(), Match.Never<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Never<string>(), Match.Always<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Never<string>(), Match.Always<string>(), Match.Always<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Always<string>(), Match.Always<string>()));
+                yield return DataTheory(false, "A", MakeMatches(Match.Never<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Never<string>()));
+                yield return DataTheory(true, "B", MakeMatches(Match.Never<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Never<string>()));
+            }
+        }
+
         private static object[] DataTheory(params object[] values)
             => values;
 

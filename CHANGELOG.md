@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Enable `None` match (#33)
 - Enable `Any` match (#31)
 - Enable `All` match (#29)
 - Enable `NotEqual` match using a comparer (#27)
