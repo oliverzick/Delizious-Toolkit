@@ -433,9 +433,16 @@ namespace Delizious
 
             public static IEnumerable<object[]> MatchesTheories()
             {
-                yield return DataTheory(true, string.Empty, MakeMatches(Match.Always<string>(), Match.Always<string>(), Match.Always<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Never<string>(), Match.Never<string>(), Match.Never<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Never<string>(), Match.Never<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Never<string>(), Match.Always<string>(), Match.Never<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Never<string>(), Match.Never<string>(), Match.Always<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Always<string>(), Match.Never<string>()));
                 yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Never<string>(), Match.Always<string>()));
+                yield return DataTheory(false, string.Empty, MakeMatches(Match.Never<string>(), Match.Always<string>(), Match.Always<string>()));
+                yield return DataTheory(true, string.Empty, MakeMatches(Match.Always<string>(), Match.Always<string>(), Match.Always<string>()));
                 yield return DataTheory(true, "A", MakeMatches(Match.Always<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Always<string>()));
+                yield return DataTheory(false, "A", MakeMatches(Match.Always<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Never<string>()));
                 yield return DataTheory(false, "B", MakeMatches(Match.Always<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Always<string>()));
             }
         }
