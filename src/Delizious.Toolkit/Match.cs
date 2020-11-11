@@ -615,6 +615,28 @@
         internal static IMatch<T> None<T>(params IMatch<T>[] matches)
             => NotMatch<T>.Create(CompositeMatch<T>.Any(matches));
 
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value matches none of the specified <paramref name="matches"/>.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the value to match.
+        /// </typeparam>
+        /// <param name="matches">
+        /// The matches a value must match none to match successfully.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value matches none of the specified <paramref name="matches"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="matches"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="matches"/> contain at least one match that is <c>null</c>.
+        /// </exception>
+        [Obsolete("This method only exists for compatibility reasons and has been replaced by 'None' method due to better naming. It will be removed in an upcoming release.")]
+        public static Match<T> Except<T>(params Match<T>[] matches)
+            => None(matches);
+
         private sealed class CompositeMatch<T> : IMatch<T>
         {
             private delegate bool CompositeMatchDelegate(IEnumerable<IMatch<T>> matches, T value);
