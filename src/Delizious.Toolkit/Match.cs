@@ -543,6 +543,42 @@
         internal static IMatch<T> All<T>(params IMatch<T>[] matches)
             => CompositeMatch<T>.All(matches);
 
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value matches any of the specified <paramref name="matches"/>.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the value to match.
+        /// </typeparam>
+        /// <param name="matches">
+        /// The matches a value must match any to match successfully.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value matches any of the specified <paramref name="matches"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="matches"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="matches"/> contain at least one match that is <c>null</c>.
+        /// </exception>
+        public static Match<T> Any<T>(params Match<T>[] matches)
+        {
+            if (ReferenceEquals(matches, null!))
+            {
+                throw new ArgumentNullException(nameof(matches));
+            }
+
+            if (matches.Any(match => ReferenceEquals(match, null)))
+            {
+                throw new ArgumentException("At least one match is a null reference.", nameof(matches));
+            }
+
+            return Match<T>.Any(matches);
+        }
+
+        internal static IMatch<T> Any<T>(params IMatch<T>[] matches)
+            => CompositeMatch<T>.Any(matches);
+
         private sealed class CompositeMatch<T> : IMatch<T>
         {
             private delegate bool CompositeMatchDelegate(IEnumerable<IMatch<T>> matches, T value);
@@ -562,6 +598,12 @@
 
             private static bool MatchAll(IEnumerable<IMatch<T>> matches, T value)
                 => matches.All(match => match.Matches(value));
+
+            public static CompositeMatch<T> Any(IMatch<T>[] matches)
+                => new CompositeMatch<T>(matches, MatchAny);
+
+            private static bool MatchAny(IEnumerable<IMatch<T>> matches, T value)
+                => matches.Any(match => match.Matches(value));
 
             public bool Matches(T value)
                 => this.compositeMatch(this.matches, value);
@@ -604,6 +646,9 @@
 
         internal static Match<T> All(IEnumerable<Match<T>> matches)
             => Create(Match.All(matches.Select(item => item.match).ToArray()));
+
+        internal static Match<T> Any(IEnumerable<Match<T>> matches)
+            => Create(Match.Any(matches.Select(item => item.match).ToArray()));
 
         /// <summary>
         /// Determines whether the specified <paramref name="value"/> successfully matches according to this match.
