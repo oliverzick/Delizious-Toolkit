@@ -690,7 +690,7 @@
     /// <typeparam name="T">
     /// The type of the value to match.
     /// </typeparam>
-    public sealed class Match<T> : IMatch<T>
+    public sealed class Match<T>
     {
         private readonly IMatch<T> match;
 
