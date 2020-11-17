@@ -11,7 +11,7 @@
     public static class Match
     {
         /// <summary>
-        /// Creates a <see cref="Match{T}"/> instance that always matches successfully regardless the value to match.
+        /// Creates a <see cref="Match{T}"/> instance that always matches successfully regardless a value to match.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the value to match.
@@ -23,7 +23,7 @@
             => Match<T>.Create(PredefinedMatch<T>.Always());
 
         /// <summary>
-        /// Creates a <see cref="Match{T}"/> instance that never matches successfully regardless the value to match.
+        /// Creates a <see cref="Match{T}"/> instance that never matches successfully regardless a value to match.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the value to match.
@@ -54,25 +54,25 @@
         }
 
         /// <summary>
-        /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is a <c>null</c> reference.
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match is a <c>null</c> reference.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the value to match. This must be a reference type.
         /// </typeparam>
         /// <returns>
-        /// A new <see cref="Match{T}"/> instance that matches successfully when the value to match is a <c>null</c> reference.
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match is a <c>null</c> reference.
         /// </returns>
         public static Match<T> Null<T>() where T : class
             => Match<T>.Create(NullMatch<T>.Create());
 
         /// <summary>
-        /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is not a <c>null</c> reference.
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match is not a <c>null</c> reference.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the value to match. This must be a reference type.
         /// </typeparam>
         /// <returns>
-        /// A new <see cref="Match{T}"/> instance that matches successfully when the value to match is not a <c>null</c> reference.
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match is not a <c>null</c> reference.
         /// </returns>
         public static Match<T> NotNull<T>() where T : class
             => Match<T>.Create(NotMatch<T>.Create(NullMatch<T>.Create()));
@@ -92,7 +92,7 @@
         }
 
         /// <summary>
-        /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is the same instance as the specified <paramref name="reference"/> value.
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match is the same instance as the specified <paramref name="reference"/> value.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the value to match. This must be a reference type.
@@ -101,7 +101,7 @@
         /// The instance a value to match must be the same to match successfully.
         /// </param>
         /// <returns>
-        /// A new <see cref="Match{T}"/> instance that matches successfully when the value to match is the same instance as the specified <paramref name="reference"/> value.
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match is the same instance as the specified <paramref name="reference"/> value.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="reference"/> is <c>null</c>. When matching an instance to be a <c>null</c> reference use <see cref="Null{T}"/> instead.
@@ -117,7 +117,7 @@
         }
 
         /// <summary>
-        /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is not the same instance as the specified <paramref name="reference"/> value.
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match is not the same instance as the specified <paramref name="reference"/> value.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the value to match. This must be a reference type.
@@ -126,7 +126,7 @@
         /// The instance a value to match must not be the same to match successfully.
         /// </param>
         /// <returns>
-        /// A new <see cref="Match{T}"/> instance that matches successfully when the value to match is not the same instance as the specified <paramref name="reference"/> value.
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match is not the same instance as the specified <paramref name="reference"/> value.
         /// </returns
         /// <exception cref="ArgumentNullException">
         /// <paramref name="reference"/> is <c>null</c>. When matching an instance to be a non-<c>null</c> reference use <see cref="NotNull{T}"/> instead.
@@ -317,7 +317,7 @@
         }
 
         /// <summary>
-        /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is greater than the specified <paramref name="reference"/> value.
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match is greater than the specified <paramref name="reference"/> value.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the value to match.
@@ -329,7 +329,7 @@
         /// The <see cref="IComparer{T}"/> instance to determine whether a value to match is greater than the specified <paramref name="reference"/> value.
         /// </param>
         /// <returns>
-        /// A new <see cref="Match{T}"/> instance that matches successfully when the value to match is greater than the specified <paramref name="reference"/> value.
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match is greater than the specified <paramref name="reference"/> value.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <para><paramref name="reference"/> is <c>null</c>.</para>
@@ -352,7 +352,7 @@
         }
 
         /// <summary>
-        /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is greater than or equal to the specified <paramref name="reference"/> value.
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match is greater than or equal to the specified <paramref name="reference"/> value.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the value to match.
@@ -364,7 +364,7 @@
         /// The <see cref="IComparer{T}"/> instance to determine whether a value to match is greater than or equal to the specified <paramref name="reference"/> value.
         /// </param>
         /// <returns>
-        /// A new <see cref="Match{T}"/> instance that matches successfully when the value to match is greater than or equal to the specified <paramref name="reference"/> value.
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match is greater than or equal to the specified <paramref name="reference"/> value.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <para><paramref name="reference"/> is <c>null</c>.</para>
@@ -387,7 +387,7 @@
         }
 
         /// <summary>
-        /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is less than the specified <paramref name="reference"/> value.
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match is less than the specified <paramref name="reference"/> value.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the value to match.
@@ -399,7 +399,7 @@
         /// The <see cref="IComparer{T}"/> instance to determine whether a value to match is less than the specified <paramref name="reference"/> value.
         /// </param>
         /// <returns>
-        /// A new <see cref="Match{T}"/> instance that matches successfully when the value to match is less than the specified <paramref name="reference"/> value.
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match is less than the specified <paramref name="reference"/> value.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <para><paramref name="reference"/> is <c>null</c>.</para>
@@ -422,7 +422,7 @@
         }
 
         /// <summary>
-        /// Creates a <see cref="Match{T}"/> instance that matches successfully when the value to match is less than or equal to the specified <paramref name="reference"/> value.
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match is less than or equal to the specified <paramref name="reference"/> value.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the value to match.
@@ -434,7 +434,7 @@
         /// The <see cref="IComparer{T}"/> instance to determine whether a value to match is less than or equal to the specified <paramref name="reference"/> value.
         /// </param>
         /// <returns>
-        /// A new <see cref="Match{T}"/> instance that matches successfully when the value to match is less than or equal to the specified <paramref name="reference"/> value.
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match is less than or equal to the specified <paramref name="reference"/> value.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <para><paramref name="reference"/> is <c>null</c>.</para>
