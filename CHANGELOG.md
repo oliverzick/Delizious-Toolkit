@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Enable `Custom` match (#36)
 - Enable `None` match (#33)
 - Enable `Any` match (#31)
 - Enable `All` match (#29)

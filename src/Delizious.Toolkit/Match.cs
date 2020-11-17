@@ -667,6 +667,52 @@
                 => this.compositeMatch(this.matches, value);
         }
 
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value matches according to the given <paramref name="customMatch"/>.
+        /// </summary>
+        /// <typeparam name="TValue">
+        /// The type of the value to match.
+        /// </typeparam>
+        /// <typeparam name="TCustomMatch">
+        /// The type of the custom match that must implement the <see cref="ICustomMatch{T}"/> interface.
+        /// </typeparam>
+        /// <param name="customMatch">
+        /// The custom match a value is matched with.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value matches according to the given <paramref name="customMatch"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="customMatch"/> is <c>null</c>.
+        /// </exception>
+        public static Match<TValue> Custom<TValue, TCustomMatch>([NotNull] TCustomMatch customMatch)
+            where TCustomMatch : ICustomMatch<TValue>
+        {
+            if (ReferenceEquals(customMatch, null))
+            {
+                throw new ArgumentNullException(nameof(customMatch));
+            }
+
+            return Match<TValue>.Create(CustomMatch<TValue, TCustomMatch>.Create(customMatch));
+        }
+
+        private sealed class CustomMatch<TValue, TCustomMatch> : IMatch<TValue>
+            where TCustomMatch : ICustomMatch<TValue>
+        {
+            private readonly TCustomMatch customMatch;
+
+            private CustomMatch(TCustomMatch customMatch)
+            {
+                this.customMatch = customMatch;
+            }
+
+            public static CustomMatch<TValue, TCustomMatch> Create(TCustomMatch customMatch)
+                => new CustomMatch<TValue, TCustomMatch>(customMatch);
+
+            public bool Matches(TValue value)
+                => this.customMatch.Matches(value);
+        }
+
         private sealed class NotMatch<T> : IMatch<T>
         {
             private readonly IMatch<T> match;
@@ -722,6 +768,26 @@
         /// </returns>
         public bool Matches(T value)
             => this.match.Matches(value);
+    }
+
+    /// <summary>
+    /// Represents a strongly typed custom match that provides a method to determine whether a value matches with.
+    /// </summary>
+    /// <typeparam name="T">
+    /// The type of the value to match.
+    /// </typeparam>
+    public interface ICustomMatch<in T>
+    {
+        /// <summary>
+        /// Determines whether the specified <paramref name="value"/> successfully matches according to this match.
+        /// </summary>
+        /// <param name="value">
+        /// The value to match.
+        /// </param>
+        /// <returns>
+        /// <c>true</c> if <paramref name="value"/> successfully matches according to this match; otherwise, <c>false</c>.
+        /// </returns>
+        bool Matches(T value);
     }
 
     internal interface IMatch<in T>
