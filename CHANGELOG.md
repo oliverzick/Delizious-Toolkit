@@ -24,3 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable `Null` match (#5)
 - Enable `Never` match (#3)
 - Enable `Always` match (#1)
+
+### Deprecated
+- `Except` match that has only been introduced for compatibility when migrating from Delizious-Filtering component (#33)
