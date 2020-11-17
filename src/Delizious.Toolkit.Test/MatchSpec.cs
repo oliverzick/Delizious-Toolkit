@@ -567,10 +567,55 @@ namespace Delizious
             }
         }
 
+        public sealed class Custom
+        {
+            [Fact]
+            public void Throws_exception_when_custom_match_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.Custom<bool, CustomMatch<bool>>(null));
+            }
+
+            [Theory]
+            [MemberData(nameof(MatchesTheories))]
+            public void Matches(bool expected, bool value, CustomMatch<bool> customMatch)
+            {
+                var subject = Match.Custom<bool, CustomMatch<bool>>(customMatch);
+
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+
+            public static IEnumerable<object[]> MatchesTheories()
+            {
+                yield return DataTheory(true, true, CustomMatch<bool>.Create(true));
+                yield return DataTheory(false, true, CustomMatch<bool>.Create(false));
+                yield return DataTheory(false, false, CustomMatch<bool>.Create(true));
+                yield return DataTheory(true, false, CustomMatch<bool>.Create(false));
+            }
+        }
+
         private static object[] DataTheory(params object[] values)
             => values;
 
         private static Match<T>[] MakeMatches<T>(params Match<T>[] matches)
             => matches;
+    }
+
+    public sealed class CustomMatch<T> : ICustomMatch<T>
+        where T : IEquatable<T>
+    {
+        private readonly T expected;
+
+        private CustomMatch(T expected)
+        {
+            this.expected = expected;
+        }
+
+        public static CustomMatch<T> Create(T expected)
+            => new CustomMatch<T>(expected);
+
+        public bool Matches(T value)
+            => this.expected.Equals(value);
     }
 }
