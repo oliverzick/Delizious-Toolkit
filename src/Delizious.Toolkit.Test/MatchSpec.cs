@@ -130,65 +130,30 @@ namespace Delizious
 
         public sealed class Equal
         {
-            public sealed class EqualityComparer
+            [Fact]
+            public void Throws_exception_when_reference_value_is_null()
             {
-                [Fact]
-                public void Throws_exception_when_reference_value_is_null()
-                {
-                    Assert.Throws<ArgumentNullException>(() => Match.Equal(null, EqualityComparer<string>.Default));
-                }
-
-                [Fact]
-                public void Throws_exception_when_equality_comparer_is_null()
-                {
-                    Assert.Throws<ArgumentNullException>(() => Match.Equal(string.Empty, (null as IEqualityComparer<string>)!));
-                }
-
-                [Theory]
-                [MemberData(nameof(MatchesTheories))]
-                public void Matches(bool expected, string reference, string value, IEqualityComparer<string> equalityComparer)
-                {
-                    var subject = Match.Equal(reference, equalityComparer);
-
-                    var actual = subject.Matches(value);
-
-                    Assert.Equal(expected, actual);
-                }
-
-                public static IEnumerable<object[]> MatchesTheories()
-                    => Equal.CommonMatchesTheories();
+                Assert.Throws<ArgumentNullException>(() => Match.Equal(null, EqualityComparer<string>.Default));
             }
 
-            public sealed class Comparer
+            [Fact]
+            public void Throws_exception_when_equality_comparer_is_null()
             {
-                [Fact]
-                public void Throws_exception_when_reference_value_is_null()
-                {
-                    Assert.Throws<ArgumentNullException>(() => Match.Equal(null, Comparer<string>.Default));
-                }
-
-                [Fact]
-                public void Throws_exception_when_comparer_is_null()
-                {
-                    Assert.Throws<ArgumentNullException>(() => Match.Equal(string.Empty, (null as IComparer<string>)!));
-                }
-
-                [Theory]
-                [MemberData(nameof(MatchesTheories))]
-                public void Matches(bool expected, string reference, string value, IComparer<string> comparer)
-                {
-                    var subject = Match.Equal(reference, comparer);
-
-                    var actual = subject.Matches(value);
-
-                    Assert.Equal(expected, actual);
-                }
-
-                public static IEnumerable<object[]> MatchesTheories()
-                    => CommonMatchesTheories();
+                Assert.Throws<ArgumentNullException>(() => Match.Equal(string.Empty, null!));
             }
 
-            private static IEnumerable<object[]> CommonMatchesTheories()
+            [Theory]
+            [MemberData(nameof(MatchesTheories))]
+            public void Matches(bool expected, string reference, string value, IEqualityComparer<string> equalityComparer)
+            {
+                var subject = Match.Equal(reference, equalityComparer);
+
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+
+            public static IEnumerable<object[]> MatchesTheories()
             {
                 yield return DataTheory(true, "", "", StringComparer.Ordinal);
                 yield return DataTheory(true, "Test", "Test", StringComparer.Ordinal);
@@ -203,65 +168,106 @@ namespace Delizious
 
         public sealed class NotEqual
         {
-            public sealed class EqualityComparer
+            [Fact]
+            public void Throws_exception_when_reference_value_is_null()
             {
-                [Fact]
-                public void Throws_exception_when_reference_value_is_null()
-                {
-                    Assert.Throws<ArgumentNullException>(() => Match.NotEqual(null, EqualityComparer<string>.Default));
-                }
-
-                [Fact]
-                public void Throws_exception_when_equality_comparer_is_null()
-                {
-                    Assert.Throws<ArgumentNullException>(() => Match.NotEqual(string.Empty, (null as IEqualityComparer<string>)!));
-                }
-
-                [Theory]
-                [MemberData(nameof(MatchesTheories))]
-                public void Matches(bool expected, string reference, string value, IEqualityComparer<string> equalityComparer)
-                {
-                    var subject = Match.NotEqual(reference, equalityComparer);
-
-                    var actual = subject.Matches(value);
-
-                    Assert.Equal(expected, actual);
-                }
-
-                public static IEnumerable<object[]> MatchesTheories()
-                    => CommonMatchesTheories();
+                Assert.Throws<ArgumentNullException>(() => Match.NotEqual(null, EqualityComparer<string>.Default));
             }
 
-            public sealed class Comparer
+            [Fact]
+            public void Throws_exception_when_equality_comparer_is_null()
             {
-                [Fact]
-                public void Throws_exception_when_reference_value_is_null()
-                {
-                    Assert.Throws<ArgumentNullException>(() => Match.NotEqual(null, Comparer<string>.Default));
-                }
-
-                [Fact]
-                public void Throws_exception_when_comparer_is_null()
-                {
-                    Assert.Throws<ArgumentNullException>(() => Match.NotEqual(string.Empty, (null as IComparer<string>)!));
-                }
-
-                [Theory]
-                [MemberData(nameof(MatchesTheories))]
-                public void Matches(bool expected, string reference, string value, IComparer<string> comparer)
-                {
-                    var subject = Match.NotEqual(reference, comparer);
-
-                    var actual = subject.Matches(value);
-
-                    Assert.Equal(expected, actual);
-                }
-
-                public static IEnumerable<object[]> MatchesTheories()
-                    => CommonMatchesTheories();
+                Assert.Throws<ArgumentNullException>(() => Match.NotEqual(string.Empty, null!));
             }
 
-            public static IEnumerable<object[]> CommonMatchesTheories()
+            [Theory]
+            [MemberData(nameof(MatchesTheories))]
+            public void Matches(bool expected, string reference, string value, IEqualityComparer<string> equalityComparer)
+            {
+                var subject = Match.NotEqual(reference, equalityComparer);
+
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+
+            public static IEnumerable<object[]> MatchesTheories()
+            {
+                yield return DataTheory(false, "", "", StringComparer.Ordinal);
+                yield return DataTheory(false, "Test", "Test", StringComparer.Ordinal);
+                yield return DataTheory(true, "Test", "Tes", StringComparer.Ordinal);
+                yield return DataTheory(true, "Test", "Testt", StringComparer.Ordinal);
+                yield return DataTheory(true, "Test", "test", StringComparer.Ordinal);
+                yield return DataTheory(true, "Test", "TEST", StringComparer.Ordinal);
+                yield return DataTheory(false, "Test", "TEST", StringComparer.OrdinalIgnoreCase);
+                yield return DataTheory(false, "Test", "test", StringComparer.OrdinalIgnoreCase);
+            }
+        }
+
+        public sealed class EqualTo
+        {
+            [Fact]
+            public void Throws_exception_when_reference_value_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.EqualTo(null, Comparer<string>.Default));
+            }
+
+            [Fact]
+            public void Throws_exception_when_comparer_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.EqualTo(string.Empty, null!));
+            }
+
+            [Theory]
+            [MemberData(nameof(MatchesTheories))]
+            public void Matches(bool expected, string reference, string value, IComparer<string> comparer)
+            {
+                var subject = Match.EqualTo(reference, comparer);
+
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+
+            public static IEnumerable<object[]> MatchesTheories()
+            {
+                yield return DataTheory(true, "", "", StringComparer.Ordinal);
+                yield return DataTheory(true, "Test", "Test", StringComparer.Ordinal);
+                yield return DataTheory(false, "Test", "Tes", StringComparer.Ordinal);
+                yield return DataTheory(false, "Test", "Testt", StringComparer.Ordinal);
+                yield return DataTheory(false, "Test", "test", StringComparer.Ordinal);
+                yield return DataTheory(false, "Test", "TEST", StringComparer.Ordinal);
+                yield return DataTheory(true, "Test", "TEST", StringComparer.OrdinalIgnoreCase);
+                yield return DataTheory(true, "Test", "test", StringComparer.OrdinalIgnoreCase);
+            }
+        }
+
+        public sealed class NotEqualTo
+        {
+            [Fact]
+            public void Throws_exception_when_reference_value_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.NotEqualTo(null, Comparer<string>.Default));
+            }
+
+            [Fact]
+            public void Throws_exception_when_comparer_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.NotEqualTo(string.Empty, null!));
+            }
+
+            [Theory]
+            [MemberData(nameof(MatchesTheories))]
+            public void Matches(bool expected, string reference, string value, IComparer<string> comparer)
+            {
+                var subject = Match.NotEqualTo(reference, comparer);
+
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+
+            public static IEnumerable<object[]> MatchesTheories()
             {
                 yield return DataTheory(false, "", "", StringComparer.Ordinal);
                 yield return DataTheory(false, "Test", "Test", StringComparer.Ordinal);
@@ -417,7 +423,7 @@ namespace Delizious
             [Fact]
             public void Throws_exception_when_matches_contain_null()
             {
-                Assert.Throws<ArgumentException>(() => Match.All<int>(Match.Always<int>(), null!, Match.Never<int>()));
+                Assert.Throws<ArgumentException>(() => Match.All(Match.Always<int>(), null!, Match.Never<int>()));
             }
 
             [Theory]
@@ -441,9 +447,9 @@ namespace Delizious
                 yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Never<string>(), Match.Always<string>()));
                 yield return DataTheory(false, string.Empty, MakeMatches(Match.Never<string>(), Match.Always<string>(), Match.Always<string>()));
                 yield return DataTheory(true, string.Empty, MakeMatches(Match.Always<string>(), Match.Always<string>(), Match.Always<string>()));
-                yield return DataTheory(true, "A", MakeMatches(Match.Always<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Always<string>()));
-                yield return DataTheory(false, "A", MakeMatches(Match.Always<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Never<string>()));
-                yield return DataTheory(false, "B", MakeMatches(Match.Always<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Always<string>()));
+                yield return DataTheory(true, "A", MakeMatches(Match.Always<string>(), Match.EqualTo("A", StringComparer.Ordinal), Match.Always<string>()));
+                yield return DataTheory(false, "A", MakeMatches(Match.Always<string>(), Match.EqualTo("A", StringComparer.Ordinal), Match.Never<string>()));
+                yield return DataTheory(false, "B", MakeMatches(Match.Always<string>(), Match.EqualTo("A", StringComparer.Ordinal), Match.Always<string>()));
             }
         }
 
@@ -482,8 +488,8 @@ namespace Delizious
                 yield return DataTheory(true, string.Empty, MakeMatches(Match.Always<string>(), Match.Never<string>(), Match.Always<string>()));
                 yield return DataTheory(true, string.Empty, MakeMatches(Match.Never<string>(), Match.Always<string>(), Match.Always<string>()));
                 yield return DataTheory(true, string.Empty, MakeMatches(Match.Always<string>(), Match.Always<string>(), Match.Always<string>()));
-                yield return DataTheory(true, "A", MakeMatches(Match.Never<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Never<string>()));
-                yield return DataTheory(false, "B", MakeMatches(Match.Never<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Never<string>()));
+                yield return DataTheory(true, "A", MakeMatches(Match.Never<string>(), Match.EqualTo("A", StringComparer.Ordinal), Match.Never<string>()));
+                yield return DataTheory(false, "B", MakeMatches(Match.Never<string>(), Match.EqualTo("A", StringComparer.Ordinal), Match.Never<string>()));
             }
         }
 
@@ -522,8 +528,8 @@ namespace Delizious
                 yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Never<string>(), Match.Always<string>()));
                 yield return DataTheory(false, string.Empty, MakeMatches(Match.Never<string>(), Match.Always<string>(), Match.Always<string>()));
                 yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Always<string>(), Match.Always<string>()));
-                yield return DataTheory(false, "A", MakeMatches(Match.Never<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Never<string>()));
-                yield return DataTheory(true, "B", MakeMatches(Match.Never<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Never<string>()));
+                yield return DataTheory(false, "A", MakeMatches(Match.Never<string>(), Match.EqualTo("A", StringComparer.Ordinal), Match.Never<string>()));
+                yield return DataTheory(true, "B", MakeMatches(Match.Never<string>(), Match.EqualTo("A", StringComparer.Ordinal), Match.Never<string>()));
             }
         }
 
@@ -562,8 +568,8 @@ namespace Delizious
                 yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Never<string>(), Match.Always<string>()));
                 yield return DataTheory(false, string.Empty, MakeMatches(Match.Never<string>(), Match.Always<string>(), Match.Always<string>()));
                 yield return DataTheory(false, string.Empty, MakeMatches(Match.Always<string>(), Match.Always<string>(), Match.Always<string>()));
-                yield return DataTheory(false, "A", MakeMatches(Match.Never<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Never<string>()));
-                yield return DataTheory(true, "B", MakeMatches(Match.Never<string>(), Match.Equal("A", (IComparer<string>)StringComparer.Ordinal), Match.Never<string>()));
+                yield return DataTheory(false, "A", MakeMatches(Match.Never<string>(), Match.EqualTo("A", StringComparer.Ordinal), Match.Never<string>()));
+                yield return DataTheory(true, "B", MakeMatches(Match.Never<string>(), Match.EqualTo("A", StringComparer.Ordinal), Match.Never<string>()));
             }
         }
 
