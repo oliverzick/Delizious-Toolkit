@@ -162,6 +162,49 @@
         /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match equals the specified <paramref name="reference"/> value.
         /// </summary>
         /// <typeparam name="T">
+        /// The type of the value to match that must implement the <see cref="IEquatable{T}"/> interface.
+        /// </typeparam>
+        /// <param name="reference">
+        /// The reference value a value to match must equal to match successfully.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match equals the specified <paramref name="reference"/> value.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="reference"/> is <c>null</c>. When matching an instance to be a <c>null</c> reference use <see cref="Null{T}"/> instead.
+        /// </exception>
+        public static Match<T> Equal<T>([NotNull] T reference)
+            where T : IEquatable<T>
+        {
+            if (ReferenceEquals(reference, null))
+            {
+                throw new ArgumentNullException(nameof(reference));
+            }
+
+            return Match<T>.Create(EqualityMatch<T>.Create(reference));
+        }
+
+        private sealed class EqualityMatch<T> : IMatch<T>
+            where T : IEquatable<T>
+        {
+            private readonly T reference;
+
+            private EqualityMatch(T reference)
+            {
+                this.reference = reference;
+            }
+
+            public static EqualityMatch<T> Create(T reference)
+                => new EqualityMatch<T>(reference);
+
+            public bool Matches(T value)
+                => this.reference.Equals(value);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match equals the specified <paramref name="reference"/> value.
+        /// </summary>
+        /// <typeparam name="T">
         /// The type of the value to match.
         /// </typeparam>
         /// <param name="reference">
@@ -190,7 +233,7 @@
                 throw new ArgumentNullException(nameof(equalityComparer));
             }
 
-            return Match<T>.Create(EqualityMatch<T>.Create(reference, equalityComparer));
+            return Match<T>.Create(EqualityComparisonMatch<T>.Create(reference, equalityComparer));
         }
 
         /// <summary>
@@ -225,22 +268,22 @@
                 throw new ArgumentNullException(nameof(equalityComparer));
             }
 
-            return Match<T>.Create(NotMatch<T>.Create(EqualityMatch<T>.Create(reference, equalityComparer)));
+            return Match<T>.Create(NotMatch<T>.Create(EqualityComparisonMatch<T>.Create(reference, equalityComparer)));
         }
 
-        private sealed class EqualityMatch<T> : IMatch<T>
+        private sealed class EqualityComparisonMatch<T> : IMatch<T>
         {
             private readonly T reference;
             private readonly IEqualityComparer<T> equalityComparer;
 
-            private EqualityMatch(T reference, IEqualityComparer<T> equalityComparer)
+            private EqualityComparisonMatch(T reference, IEqualityComparer<T> equalityComparer)
             {
                 this.reference = reference;
                 this.equalityComparer = equalityComparer;
             }
 
-            public static EqualityMatch<T> Create(T reference, IEqualityComparer<T> equalityComparer)
-                => new EqualityMatch<T>(reference, equalityComparer);
+            public static EqualityComparisonMatch<T> Create(T reference, IEqualityComparer<T> equalityComparer)
+                => new EqualityComparisonMatch<T>(reference, equalityComparer);
 
             public bool Matches(T value)
                 => this.equalityComparer.Equals(this.reference, value);
