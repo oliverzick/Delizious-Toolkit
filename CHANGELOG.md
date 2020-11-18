@@ -25,5 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Never` match (#3)
 - `Always` match (#1)
 
+### Changed
+- Prevent ambiguity of factory methods for matches that match for equality using names 'Equal'/'NotEqual' (use of equality comparer) and 'EqualTo'/'NotEqualTo' (use of comparer) (#38)
+
 ### Deprecated
 - `Except` match that has only been introduced for compatibility when migrating from Delizious-Filtering component (#33)

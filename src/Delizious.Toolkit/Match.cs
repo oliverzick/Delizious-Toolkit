@@ -266,7 +266,7 @@
         /// <para>- or -</para>
         /// <para><paramref name="comparer"/> is <c>null</c>.</para>
         /// </exception>
-        public static Match<T> Equal<T>([NotNull] T reference, [NotNull] IComparer<T> comparer)
+        public static Match<T> EqualTo<T>([NotNull] T reference, [NotNull] IComparer<T> comparer)
         {
             if (ReferenceEquals(reference, null))
             {
@@ -278,7 +278,7 @@
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return Match<T>.Create(CompareMatch<T>.Equal(reference, comparer));
+            return Match<T>.Create(CompareMatch<T>.EqualTo(reference, comparer));
         }
 
         /// <summary>
@@ -301,7 +301,7 @@
         /// <para>- or -</para>
         /// <para><paramref name="comparer"/> is <c>null</c>.</para>
         /// </exception>
-        public static Match<T> NotEqual<T>([NotNull] T reference, [NotNull] IComparer<T> comparer)
+        public static Match<T> NotEqualTo<T>([NotNull] T reference, [NotNull] IComparer<T> comparer)
         {
             if (ReferenceEquals(reference, null))
             {
@@ -313,7 +313,7 @@
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return Match<T>.Create(NotMatch<T>.Create(CompareMatch<T>.Equal(reference, comparer)));
+            return Match<T>.Create(NotMatch<T>.Create(CompareMatch<T>.EqualTo(reference, comparer)));
         }
 
         /// <summary>
@@ -473,10 +473,10 @@
                 this.comparison = comparison;
             }
 
-            public static CompareMatch<T> Equal(T reference, IComparer<T> comparer)
-                => new CompareMatch<T>(reference, comparer, EqualComparison);
+            public static CompareMatch<T> EqualTo(T reference, IComparer<T> comparer)
+                => new CompareMatch<T>(reference, comparer, EqualToComparison);
 
-            private static bool EqualComparison(T left, T right, IComparer<T> comparer)
+            private static bool EqualToComparison(T left, T right, IComparer<T> comparer)
                 => comparer.Compare(left, right) == 0;
 
             public static CompareMatch<T> GreaterThan(T reference, IComparer<T> comparer)
