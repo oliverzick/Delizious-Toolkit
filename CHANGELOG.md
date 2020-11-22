@@ -6,8 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- `NotEqualTo` match for equatable types [[#42](https://github.com/oliverzick/Delizious-Toolkit/issues/42)]
-- `EqualTo` match for equatable types [[#40](https://github.com/oliverzick/Delizious-Toolkit/issues/40)]
+- `NotEqual` match for equatable types [[#42](https://github.com/oliverzick/Delizious-Toolkit/issues/42)]
+- `Equal` match for equatable types [[#40](https://github.com/oliverzick/Delizious-Toolkit/issues/40)]
 - `Custom` match [[#36](https://github.com/oliverzick/Delizious-Toolkit/issues/36)]
 - `None` match [[#33](https://github.com/oliverzick/Delizious-Toolkit/issues/33)]
 - `Any` match [[#31](https://github.com/oliverzick/Delizious-Toolkit/issues/31)]
