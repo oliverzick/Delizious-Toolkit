@@ -156,6 +156,34 @@ namespace Delizious
             }
         }
 
+        public sealed class NotEqualEquatable
+        {
+            [Fact]
+            public void Throws_exception_when_reference_value_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.NotEqual<string>(null));
+            }
+
+            [Theory]
+            [MemberData(nameof(MatchesTheories))]
+            public void Matches(bool expected, bool reference, bool value)
+            {
+                var subject = Match.NotEqual(reference);
+
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+
+            public static IEnumerable<object[]> MatchesTheories()
+            {
+                yield return DataTheory(false, true,  true);
+                yield return DataTheory(true,  true,  false);
+                yield return DataTheory(true,  false, true);
+                yield return DataTheory(false, false, false);
+            }
+        }
+
         public sealed class EqualEqualityComparer
         {
             [Fact]
@@ -195,7 +223,7 @@ namespace Delizious
         }
 
 
-        public sealed class NotEqual
+        public sealed class NotEqualEqualityComparer
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
