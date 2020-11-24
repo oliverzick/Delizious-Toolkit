@@ -441,6 +441,32 @@
         /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match is greater than the specified <paramref name="reference"/> value.
         /// </summary>
         /// <typeparam name="T">
+        /// The type of the value to match that must implement the <see cref="IComparable{T}"/> interface.
+        /// </typeparam>
+        /// <param name="reference">
+        /// The instance a value to match must be greater than to match successfully.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match is greater than the specified <paramref name="reference"/> value.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="reference"/> is <c>null</c>.
+        /// </exception>
+        public static Match<T> GreaterThan<T>([NotNull] T reference)
+            where T : IComparable<T>
+        {
+            if (ReferenceEquals(reference, null))
+            {
+                throw new ArgumentNullException(nameof(reference));
+            }
+
+            return Match<T>.Create(ComparisonMatch<T>.GreaterThan(Comparison.Comparable(reference)));
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match is greater than the specified <paramref name="reference"/> value.
+        /// </summary>
+        /// <typeparam name="T">
         /// The type of the value to match.
         /// </typeparam>
         /// <param name="reference">

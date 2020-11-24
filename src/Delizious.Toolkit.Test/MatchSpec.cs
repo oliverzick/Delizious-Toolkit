@@ -398,6 +398,37 @@ namespace Delizious
             }
         }
 
+        public sealed class GreaterThanComparable
+        {
+            [Fact]
+            public void Throws_exception_when_reference_value_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.GreaterThan<string>(null));
+            }
+
+            [Theory]
+            [MemberData(nameof(MatchesTheories))]
+            public void Matches(bool expected, int reference, int value)
+            {
+                var subject = Match.GreaterThan(reference);
+
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+
+            public static IEnumerable<object[]> MatchesTheories()
+            {
+                yield return DataTheory(false, 1,  1);
+                yield return DataTheory(false,  1,  0);
+                yield return DataTheory(true,  0,  1);
+                yield return DataTheory(false, 0,  0);
+                yield return DataTheory(true,  -1, 0);
+                yield return DataTheory(false,  0,  -1);
+                yield return DataTheory(false, -1, -1);
+            }
+        }
+
         public sealed class GreaterThan
         {
             [Fact]
