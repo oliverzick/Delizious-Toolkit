@@ -380,6 +380,32 @@
         /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match does not equal the specified <paramref name="reference"/> value.
         /// </summary>
         /// <typeparam name="T">
+        /// The type of the value to match that must implement the <see cref="IComparable{T}"/> interface.
+        /// </typeparam>
+        /// <param name="reference">
+        /// The reference value a value to match must not equal to match successfully.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match does not equal the specified <paramref name="reference"/> value.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="reference"/> is <c>null</c>. When matching an instance to be a non-<c>null</c> reference use <see cref="NotNull{T}"/> instead.
+        /// </exception>
+        public static Match<T> NotEqualTo<T>([NotNull] T reference)
+            where T : IComparable<T>
+        {
+            if (ReferenceEquals(reference, null))
+            {
+                throw new ArgumentNullException(nameof(reference));
+            }
+
+            return Match<T>.Create(NotMatch<T>.Create(ComparisonMatch<T>.EqualTo(Comparison.Comparable(reference))));
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match does not equal the specified <paramref name="reference"/> value.
+        /// </summary>
+        /// <typeparam name="T">
         /// The type of the value to match.
         /// </typeparam>
         /// <param name="reference">
