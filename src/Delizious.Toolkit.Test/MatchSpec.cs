@@ -128,7 +128,7 @@ namespace Delizious
             }
         }
 
-        public sealed class EqualEquatable
+        public sealed class Equal_Equatable
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -156,7 +156,7 @@ namespace Delizious
             }
         }
 
-        public sealed class NotEqualEquatable
+        public sealed class NotEqual_Equatable
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -184,7 +184,7 @@ namespace Delizious
             }
         }
 
-        public sealed class EqualEqualityComparer
+        public sealed class Equal_EqualityComparer
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -222,7 +222,7 @@ namespace Delizious
             }
         }
 
-        public sealed class NotEqualEqualityComparer
+        public sealed class NotEqual_EqualityComparer
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -260,7 +260,7 @@ namespace Delizious
             }
         }
 
-        public sealed class EqualToComparable
+        public sealed class EqualTo_Comparable
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -291,7 +291,7 @@ namespace Delizious
             }
         }
 
-        public sealed class EqualTo
+        public sealed class EqualTo_Comparer
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -329,7 +329,7 @@ namespace Delizious
             }
         }
 
-        public sealed class NotEqualToComparable
+        public sealed class NotEqualTo_Comparable
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -360,7 +360,7 @@ namespace Delizious
             }
         }
 
-        public sealed class NotEqualTo
+        public sealed class NotEqualTo_Comparer
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -398,7 +398,7 @@ namespace Delizious
             }
         }
 
-        public sealed class GreaterThanComparable
+        public sealed class GreaterThan_Comparable
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -429,7 +429,7 @@ namespace Delizious
             }
         }
 
-        public sealed class GreaterThan
+        public sealed class GreaterThan_Comparer
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -462,7 +462,7 @@ namespace Delizious
             }
         }
 
-        public sealed class GreaterThanOrEqualToComparable
+        public sealed class GreaterThanOrEqualTo_Comparable
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -493,7 +493,7 @@ namespace Delizious
             }
         }
 
-        public sealed class GreaterThanOrEqualTo
+        public sealed class GreaterThanOrEqualTo_Comparer
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -526,7 +526,7 @@ namespace Delizious
             }
         }
 
-        public sealed class LessThanComparable
+        public sealed class LessThan_Comparable
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -557,7 +557,7 @@ namespace Delizious
             }
         }
 
-        public sealed class LessThan
+        public sealed class LessThan_Comparer
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -590,7 +590,7 @@ namespace Delizious
             }
         }
 
-        public sealed class LessThanOrEqualToComparable
+        public sealed class LessThanOrEqualTo_Comparable
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
@@ -621,7 +621,7 @@ namespace Delizious
             }
         }
 
-        public sealed class LessThanOrEqualTo
+        public sealed class LessThanOrEqualTo_Comparer
         {
             [Fact]
             public void Throws_exception_when_reference_value_is_null()
