@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- `LessThan` match for comparable types [[#52](https://github.com/oliverzick/Delizious-Toolkit/issues/52)]
 - `GreaterThanOrEqualTo` match for comparable types [[#50](https://github.com/oliverzick/Delizious-Toolkit/issues/50)]
 - `GreaterThan` match for comparable types [[#48](https://github.com/oliverzick/Delizious-Toolkit/issues/48)]
 - `NotEqualTo` match for comparable types [[#46](https://github.com/oliverzick/Delizious-Toolkit/issues/46)]
