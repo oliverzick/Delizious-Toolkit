@@ -324,6 +324,32 @@
         /// <param name="reference">
         /// The reference value a value to match must equal to match successfully.
         /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match equals the specified <paramref name="reference"/> value.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="reference"/> is <c>null</c>.
+        /// </exception>
+        public static Match<T> EqualTo<T>([NotNull] T reference)
+            where T : IComparable<T>
+        {
+            if (ReferenceEquals(reference, null))
+            {
+                throw new ArgumentNullException(nameof(reference));
+            }
+
+            return Match<T>.Create(ComparisonMatch<T>.EqualTo(Comparison.Comparable(reference)));
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match equals the specified <paramref name="reference"/> value.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the value to match.
+        /// </typeparam>
+        /// <param name="reference">
+        /// The reference value a value to match must equal to match successfully.
+        /// </param>
         /// <param name="comparer">
         /// The <see cref="IComparer{T}"/> instance to determine whether a value to match equals the specified <paramref name="reference"/> value.
         /// </param>
@@ -523,6 +549,30 @@
             }
 
             return Match<T>.Create(CompareMatch<T>.LessThanOrEqualTo(reference, comparer));
+        }
+
+        private sealed class ComparisonMatch<T> : IMatch<T>
+        {
+            private delegate bool MatchDelegate(int comparisonResult);
+
+            private readonly IComparison<T> comparison;
+
+            private readonly MatchDelegate match;
+
+            private ComparisonMatch(IComparison<T> comparison, MatchDelegate match)
+            {
+                this.comparison = comparison;
+                this.match = match;
+            }
+
+            public static ComparisonMatch<T> EqualTo(IComparison<T> comparison)
+                => new ComparisonMatch<T>(comparison, EqualToMatch);
+
+            private static bool EqualToMatch(int comparisonResult)
+                => comparisonResult == 0;
+
+            public bool Matches(T value)
+                => this.match(this.comparison.Compare(value));
         }
 
         private sealed class CompareMatch<T> : IMatch<T>
