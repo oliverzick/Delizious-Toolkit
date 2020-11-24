@@ -319,7 +319,7 @@
         /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match equals the specified <paramref name="reference"/> value.
         /// </summary>
         /// <typeparam name="T">
-        /// The type of the value to match.
+        /// The type of the value to match that must implement the <see cref="IComparable{T}"/> interface.
         /// </typeparam>
         /// <param name="reference">
         /// The reference value a value to match must equal to match successfully.
