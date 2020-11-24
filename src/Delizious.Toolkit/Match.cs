@@ -319,6 +319,32 @@
         /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match equals the specified <paramref name="reference"/> value.
         /// </summary>
         /// <typeparam name="T">
+        /// The type of the value to match that must implement the <see cref="IComparable{T}"/> interface.
+        /// </typeparam>
+        /// <param name="reference">
+        /// The reference value a value to match must equal to match successfully.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match equals the specified <paramref name="reference"/> value.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="reference"/> is <c>null</c>.
+        /// </exception>
+        public static Match<T> EqualTo<T>([NotNull] T reference)
+            where T : IComparable<T>
+        {
+            if (ReferenceEquals(reference, null))
+            {
+                throw new ArgumentNullException(nameof(reference));
+            }
+
+            return Match<T>.Create(ComparisonMatch<T>.EqualTo(Comparison.Comparable(reference)));
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that matches successfully when a value to match equals the specified <paramref name="reference"/> value.
+        /// </summary>
+        /// <typeparam name="T">
         /// The type of the value to match.
         /// </typeparam>
         /// <param name="reference">
@@ -347,7 +373,7 @@
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return Match<T>.Create(CompareMatch<T>.EqualTo(reference, comparer));
+            return Match<T>.Create(ComparisonMatch<T>.EqualTo(Comparison.Comparer(reference, comparer)));
         }
 
         /// <summary>
@@ -382,7 +408,7 @@
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return Match<T>.Create(NotMatch<T>.Create(CompareMatch<T>.EqualTo(reference, comparer)));
+            return Match<T>.Create(NotMatch<T>.Create(ComparisonMatch<T>.EqualTo(Comparison.Comparer(reference, comparer))));
         }
 
         /// <summary>
@@ -417,7 +443,7 @@
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return Match<T>.Create(CompareMatch<T>.GreaterThan(reference, comparer));
+            return Match<T>.Create(ComparisonMatch<T>.GreaterThan(Comparison.Comparer(reference, comparer)));
         }
 
         /// <summary>
@@ -452,7 +478,7 @@
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return Match<T>.Create(CompareMatch<T>.GreaterThanOrEqualTo(reference, comparer));
+            return Match<T>.Create(ComparisonMatch<T>.GreaterThanOrEqualTo(Comparison.Comparer(reference, comparer)));
         }
 
         /// <summary>
@@ -487,7 +513,7 @@
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return Match<T>.Create(CompareMatch<T>.LessThan(reference, comparer));
+            return Match<T>.Create(ComparisonMatch<T>.LessThan(Comparison.Comparer(reference, comparer)));
         }
 
         /// <summary>
@@ -522,58 +548,55 @@
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return Match<T>.Create(CompareMatch<T>.LessThanOrEqualTo(reference, comparer));
+            return Match<T>.Create(ComparisonMatch<T>.LessThanOrEqualTo(Comparison.Comparer(reference, comparer)));
         }
 
-        private sealed class CompareMatch<T> : IMatch<T>
+        private sealed class ComparisonMatch<T> : IMatch<T>
         {
-            private delegate bool Comparison(T left, T right, IComparer<T> comparer);
+            private delegate bool MatchDelegate(int comparisonResult);
 
-            private readonly T reference;
+            private readonly IComparison<T> comparison;
 
-            private readonly IComparer<T> comparer;
+            private readonly MatchDelegate match;
 
-            private readonly Comparison comparison;
-
-            private CompareMatch(T reference, IComparer<T> comparer, Comparison comparison)
+            private ComparisonMatch(IComparison<T> comparison, MatchDelegate match)
             {
-                this.reference = reference;
-                this.comparer = comparer;
                 this.comparison = comparison;
+                this.match = match;
             }
 
-            public static CompareMatch<T> EqualTo(T reference, IComparer<T> comparer)
-                => new CompareMatch<T>(reference, comparer, EqualToComparison);
+            public static ComparisonMatch<T> EqualTo(IComparison<T> comparison)
+                => new ComparisonMatch<T>(comparison, EqualToMatch);
 
-            private static bool EqualToComparison(T left, T right, IComparer<T> comparer)
-                => comparer.Compare(left, right) == 0;
+            private static bool EqualToMatch(int comparisonResult)
+                => comparisonResult == 0;
 
-            public static CompareMatch<T> GreaterThan(T reference, IComparer<T> comparer)
-                => new CompareMatch<T>(reference, comparer, GreaterThanComparison);
+            public static ComparisonMatch<T> GreaterThan(IComparison<T> comparison)
+                => new ComparisonMatch<T>(comparison, GreaterThanMatch);
 
-            private static bool GreaterThanComparison(T left, T right, IComparer<T> comparer)
-                => comparer.Compare(left, right) > 0;
+            private static bool GreaterThanMatch(int comparisonResult)
+                => comparisonResult > 0;
 
-            public static CompareMatch<T> GreaterThanOrEqualTo(T reference, IComparer<T> comparer)
-                => new CompareMatch<T>(reference, comparer, GreaterThanOrEqualToComparison);
+            public static ComparisonMatch<T> GreaterThanOrEqualTo(IComparison<T> comparison)
+                => new ComparisonMatch<T>(comparison, GreaterThanOrEqualToMatch);
 
-            private static bool GreaterThanOrEqualToComparison(T left, T right, IComparer<T> comparer)
-                => comparer.Compare(left, right) >= 0;
+            private static bool GreaterThanOrEqualToMatch(int comparisonResult)
+                => comparisonResult >= 0;
 
-            public static CompareMatch<T> LessThan(T reference, IComparer<T> comparer)
-                => new CompareMatch<T>(reference, comparer, LessThanComparison);
+            public static ComparisonMatch<T> LessThan(IComparison<T> comparison)
+                => new ComparisonMatch<T>(comparison, LessThanMatch);
 
-            private static bool LessThanComparison<T>(T left, T right, IComparer<T> comparer)
-                => comparer.Compare(left, right) < 0;
+            private static bool LessThanMatch(int comparisonResult)
+                => comparisonResult < 0;
 
-            public static CompareMatch<T> LessThanOrEqualTo(T reference, IComparer<T> comparer)
-                => new CompareMatch<T>(reference, comparer, LessThanOrEqualToComparison);
+            public static ComparisonMatch<T> LessThanOrEqualTo(IComparison<T> comparison)
+                => new ComparisonMatch<T>(comparison, LessThanOrEqualToToMatch);
 
-            private static bool LessThanOrEqualToComparison(T left, T right, IComparer<T> comparer)
-                => comparer.Compare(left, right) <= 0;
+            private static bool LessThanOrEqualToToMatch(int comparisonResult)
+                => comparisonResult <= 0;
 
             public bool Matches(T value)
-                => this.comparison(value, this.reference, this.comparer);
+                => this.match(this.comparison.Compare(value));
         }
 
         /// <summary>
