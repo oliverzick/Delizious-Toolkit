@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Always` match [[#1](https://github.com/oliverzick/Delizious-Toolkit/issues/1)]
 
 ### Changed
+- Enable sameness matches to match null values [[#60](https://github.com/oliverzick/Delizious-Toolkit/issues/60)]
 - Enable equality matches to match null values [[#58](https://github.com/oliverzick/Delizious-Toolkit/issues/58)]
 - Enable matches for comparable types to match null values [[#56](https://github.com/oliverzick/Delizious-Toolkit/issues/56)]
 - Prevent ambiguity of factory methods for matches that match for equality using names 'Equal'/'NotEqual' (use of equality comparer) and 'EqualTo'/'NotEqualTo' (use of comparer) [[#38](https://github.com/oliverzick/Delizious-Toolkit/issues/38)]
