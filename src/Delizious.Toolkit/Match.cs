@@ -88,7 +88,7 @@
                 => new NullMatch<T>();
 
             public bool Matches(T value)
-                => ReferenceEquals(value, null);
+                => ReferenceEquals(value, null!);
         }
 
         /// <summary>
