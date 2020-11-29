@@ -92,6 +92,8 @@ namespace Delizious
                 var instance1 = new object();
                 var instance2 = new object();
 
+                yield return DataTheory(false, instance1, null);
+                yield return DataTheory(false, instance2, null);
                 yield return DataTheory(true,  instance1, instance1);
                 yield return DataTheory(true,  instance2, instance2);
                 yield return DataTheory(false, instance1, instance2);
@@ -122,6 +124,8 @@ namespace Delizious
                 var instance1 = new object();
                 var instance2 = new object();
 
+                yield return DataTheory(true,  instance1, null);
+                yield return DataTheory(true,  instance2, null);
                 yield return DataTheory(false, instance1, instance1);
                 yield return DataTheory(false, instance2, instance2);
                 yield return DataTheory(true,  instance1, instance2);
