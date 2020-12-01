@@ -9,11 +9,12 @@ namespace Delizious
         public sealed class Always
         {
             [Theory]
-            [InlineData(true, false)]
-            [InlineData(true, true)]
-            public void Matches(bool expected, bool value)
+            [InlineData(true, null)]
+            [InlineData(true, "")]
+            [InlineData(true, "A")]
+            public void Matches(bool expected, string value)
             {
-                var subject = Match.Always<bool>();
+                var subject = Match.Always<string>();
 
                 var actual = subject.Matches(value);
 
@@ -24,11 +25,12 @@ namespace Delizious
         public sealed class Never
         {
             [Theory]
-            [InlineData(false, false)]
-            [InlineData(false, true)]
-            public void Matches(bool expected, bool value)
+            [InlineData(false, null)]
+            [InlineData(false, "")]
+            [InlineData(false, "A")]
+            public void Matches(bool expected, string value)
             {
-                var subject = Match.Never<bool>();
+                var subject = Match.Never<string>();
 
                 var actual = subject.Matches(value);
 
