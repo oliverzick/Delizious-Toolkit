@@ -34,11 +34,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Always` match [[#1](https://github.com/oliverzick/Delizious-Toolkit/issues/1)]
 
 ### Changed
+- Ensure composite matches to accept null values for matching [[#64](https://github.com/oliverzick/Delizious-Toolkit/issues/64)]
 - Ensure predefined matches to accept null values for matching [[#62](https://github.com/oliverzick/Delizious-Toolkit/issues/62)]
 - Ensure sameness matches to accept null values for matching [[#60](https://github.com/oliverzick/Delizious-Toolkit/issues/60)]
 - Ensure equality matches to accept null values for matching [[#58](https://github.com/oliverzick/Delizious-Toolkit/issues/58)]
 - Ensure comparison matches to accept null values for matching [[#56](https://github.com/oliverzick/Delizious-Toolkit/issues/56)]
-- Prevent ambiguity of factory methods for matches that match for equality using names 'Equal'/'NotEqual' (use of equality comparer) and 'EqualTo'/'NotEqualTo' (use of comparer) [[#38](https://github.com/oliverzick/Delizious-Toolkit/issues/38)]
+- Prevent ambiguity of factory methods for matches that match for equality using names `Equal`/`NotEqual` (use of equality comparer) and `EqualTo`/`NotEqualTo` (use of comparer) [[#38](https://github.com/oliverzick/Delizious-Toolkit/issues/38)]
 
 ### Deprecated
 - `Except` match that has only been introduced for compatibility when migrating from Delizious-Filtering component [[#33](https://github.com/oliverzick/Delizious-Toolkit/issues/33)]
