@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Always` match [[#1](https://github.com/oliverzick/Delizious-Toolkit/issues/1)]
 
 ### Changed
+- Ensure composite matches to accept null values for matching [[#64](https://github.com/oliverzick/Delizious-Toolkit/issues/64)]
 - Ensure predefined matches to accept null values for matching [[#62](https://github.com/oliverzick/Delizious-Toolkit/issues/62)]
 - Ensure sameness matches to accept null values for matching [[#60](https://github.com/oliverzick/Delizious-Toolkit/issues/60)]
 - Ensure equality matches to accept null values for matching [[#58](https://github.com/oliverzick/Delizious-Toolkit/issues/58)]
