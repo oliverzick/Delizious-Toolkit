@@ -80,7 +80,7 @@ namespace Delizious
 
             [Theory]
             [MemberData(nameof(MatchesTheories))]
-            public void Matches(bool expected, object reference, object value)
+            public void Matches(bool expected, object value, object reference)
             {
                 var subject = Match.Same(reference);
 
@@ -94,11 +94,12 @@ namespace Delizious
                 var instance1 = new object();
                 var instance2 = new object();
 
-                yield return DataTheory(false, instance1, null);
-                yield return DataTheory(false, instance2, null);
+                yield return DataTheory(false, null,      instance1);
+                yield return DataTheory(false, null,      instance2);
                 yield return DataTheory(true,  instance1, instance1);
                 yield return DataTheory(true,  instance2, instance2);
                 yield return DataTheory(false, instance1, instance2);
+                yield return DataTheory(false, instance2, instance1);
             }
         }
 
@@ -112,7 +113,7 @@ namespace Delizious
 
             [Theory]
             [MemberData(nameof(MatchesTheories))]
-            public void Matches(bool expected, object reference, object value)
+            public void Matches(bool expected, object value, object reference)
             {
                 var subject = Match.NotSame(reference);
 
@@ -126,11 +127,12 @@ namespace Delizious
                 var instance1 = new object();
                 var instance2 = new object();
 
-                yield return DataTheory(true,  instance1, null);
-                yield return DataTheory(true,  instance2, null);
+                yield return DataTheory(true,  null,      instance1);
+                yield return DataTheory(true,  null,      instance2);
                 yield return DataTheory(false, instance1, instance1);
                 yield return DataTheory(false, instance2, instance2);
                 yield return DataTheory(true,  instance1, instance2);
+                yield return DataTheory(true,  instance2, instance1);
             }
         }
 
