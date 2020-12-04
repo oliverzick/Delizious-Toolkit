@@ -983,13 +983,13 @@
             => Create(Match.None(matches.Select(item => item.match).ToArray()));
 
         /// <summary>
-        /// Determines whether the specified <paramref name="value"/> successfully matches according to this match.
+        /// Determines whether the specified <paramref name="value"/> matches successfully according to this match.
         /// </summary>
         /// <param name="value">
         /// The value to match.
         /// </param>
         /// <returns>
-        /// <c>true</c> if <paramref name="value"/> successfully matches according to this match; otherwise, <c>false</c>.
+        /// <c>true</c> if <paramref name="value"/> matches successfully according to this match; otherwise, <c>false</c>.
         /// </returns>
         public bool Matches(T value)
             => this.match.Matches(value);
@@ -1004,13 +1004,13 @@
     public interface ICustomMatch<in T>
     {
         /// <summary>
-        /// Determines whether the specified <paramref name="value"/> successfully matches according to this match.
+        /// Determines whether the specified <paramref name="value"/> matches successfully according to this match.
         /// </summary>
         /// <param name="value">
         /// The value to match.
         /// </param>
         /// <returns>
-        /// <c>true</c> if <paramref name="value"/> successfully matches according to this match; otherwise, <c>false</c>.
+        /// <c>true</c> if <paramref name="value"/>  matches successfully according to this match; otherwise, <c>false</c>.
         /// </returns>
         bool Matches(T value);
     }
