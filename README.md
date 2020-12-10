@@ -40,3 +40,52 @@ Match | What
 `None` | Matches when a value matches none of the given matches
 `Except` | (**obsolete**) Matches when a value matches none of the given matches
 `Custom` | Matches when a value matches the given custom match
+
+### Sample
+The following sample shows the use of composition to combine different matches:
+
+```csharp
+// Match when value <= -1 or value == 2 or (value => 4 and value < 7) or value > 10
+var match = Match.Any(Match.LessThanOrEqualTo(-1),
+                      Match.EqualTo(2),
+                      Match.All(Match.GreaterThanOrEqualTo(4),
+                                Match.LessThan(7)),
+                      Match.GreaterThan(10));
+
+var values = Enumerable.Range(-5, 20);
+
+Console.WriteLine("Match when value <= -1 or value == 2 or (value => 4 and value < 7) or value > 10");
+
+foreach (var value in values)
+{
+    var result = match.Matches(value);
+
+    Console.WriteLine($"Match value {value}: {result}");
+}
+
+/* Output:
+
+Match when value <= -1 or value == 2 or(value => 4 and value < 7) or value > 10
+Match value -5: True
+Match value -4: True
+Match value -3: True
+Match value -2: True
+Match value -1: True
+Match value 0: False
+Match value 1: False
+Match value 2: True
+Match value 3: False
+Match value 4: True
+Match value 5: True
+Match value 6: True
+Match value 7: False
+Match value 8: False
+Match value 9: False
+Match value 10: False
+Match value 11: True
+Match value 12: True
+Match value 13: True
+Match value 14: True
+
+*/
+```
