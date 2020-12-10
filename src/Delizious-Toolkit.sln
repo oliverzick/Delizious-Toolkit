@@ -5,13 +5,15 @@ VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Delizious.Toolkit", "Delizious.Toolkit\Delizious.Toolkit.csproj", "{1BA818CF-0E84-49D0-ADCD-49CE12AE0A08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delizious.Toolkit.Test", "Delizious.Toolkit.Test\Delizious.Toolkit.Test.csproj", "{5885744F-9FAA-435B-BCC3-025365F8D4C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Delizious.Toolkit.Test", "Delizious.Toolkit.Test\Delizious.Toolkit.Test.csproj", "{5885744F-9FAA-435B-BCC3-025365F8D4C6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{55F8BD7E-15AB-4403-8C96-851B4D864FA5}"
 	ProjectSection(SolutionItems) = preProject
 		..\CHANGELOG.md = ..\CHANGELOG.md
 		..\README.md = ..\README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples", "Samples\Samples.csproj", "{59773198-E081-44BF-8658-7AC68859ED6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{5885744F-9FAA-435B-BCC3-025365F8D4C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5885744F-9FAA-435B-BCC3-025365F8D4C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5885744F-9FAA-435B-BCC3-025365F8D4C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59773198-E081-44BF-8658-7AC68859ED6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59773198-E081-44BF-8658-7AC68859ED6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59773198-E081-44BF-8658-7AC68859ED6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59773198-E081-44BF-8658-7AC68859ED6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
