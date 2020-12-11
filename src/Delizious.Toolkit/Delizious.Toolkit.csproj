@@ -7,6 +7,14 @@
     <RepositoryUrl>https://github.com/oliverzick/Delizious-Toolkit</RepositoryUrl>
     <RootNamespace>Delizious</RootNamespace>
     <Nullable>enable</Nullable>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Company />
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
+    <PackageId>Delizious-Toolkit</PackageId>
+    <Product>Delizious Toolkit</Product>
+    <PackageTags>.net dotnet csharp delizious match matching filtering immutable immutability object-oriented object-functional</PackageTags>
+    <Description>An easy to use .NET libary that provides matching of values.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -19,5 +27,12 @@
     <OutputPath>bin\Release</OutputPath>
     <DocumentationFile>bin\Release\Delizious.Toolkit.xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
