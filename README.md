@@ -11,7 +11,7 @@ If you like or use my work and you are interested in this kind of software devel
 # Features
 ## Overview
 Delizious Toolkit provides the following features:
-* [Matching of values](#matching-of-values) that was adopted from [Delizious Filtering](https://github.com/oliverzick/Delizious-Filtering) library
+* [Matching of values](#matching-of-values) that is adopted from [Delizious Filtering](https://github.com/oliverzick/Delizious-Filtering) library
 
 Upcoming features:
 * Decision trees
