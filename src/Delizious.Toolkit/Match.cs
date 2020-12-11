@@ -155,7 +155,7 @@ namespace Delizious
         /// </param>
         /// <returns>
         /// A new <see cref="Match{T}"/> instance that matches successfully when a value to match is not the same instance as the specified <paramref name="reference"/> value.
-        /// </returns
+        /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="reference"/> is <c>null</c>. When matching an instance to be a non-<c>null</c> reference use <see cref="NotNull{T}"/> instead.
         /// </exception>
