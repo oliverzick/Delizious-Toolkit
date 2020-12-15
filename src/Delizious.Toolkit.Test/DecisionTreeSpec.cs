@@ -39,15 +39,15 @@ namespace Delizious
             [Fact]
             public void Throws_exception_when_children_are_null()
             {
-                Assert.Throws<ArgumentNullException>(() => DecisionTree.Root<Context, int>(null!));
+                Assert.Throws<ArgumentNullException>(() => DecisionTree.Root<Context, string>(null!));
             }
 
             [Fact]
             public void Throws_exception_when_children_contain_null()
             {
-                Assert.Throws<ArgumentException>(() => DecisionTree.Root<Context, int>(DecisionTree.Leaf<Context, int>(1),
-                                                                                       null!,
-                                                                                       DecisionTree.Leaf<Context, int>(2)));
+                Assert.Throws<ArgumentException>(() => DecisionTree.Root(DecisionTree.Leaf<Context, string>("1"),
+                                                                         null!,
+                                                                         DecisionTree.Leaf<Context, string>("2")));
             }
         }
 
