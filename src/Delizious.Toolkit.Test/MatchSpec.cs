@@ -30,6 +30,7 @@ namespace Delizious
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using Xunit;
 
     public sealed class MatchSpec
@@ -914,6 +915,41 @@ namespace Delizious
                 yield return DataTheory(false, false, CustomMatch<bool>.Create(true));
                 yield return DataTheory(true,  false, CustomMatch<bool>.Create(false));
             }
+        }
+
+        public sealed class Transform
+        {
+            [Fact]
+            public void Throws_exception_when_transformation_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.Transform<int, string>(null!, Match.Always<string>()));
+            }
+
+            [Fact]
+            public void Throws_exception_when_match_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => Match.Transform<int, string>(Transformation, null!));
+            }
+
+            [Theory]
+            [MemberData(nameof(MatchesTheories))]
+            public void Matches(bool expected, int value, Match<int> subject)
+            {
+                var actual = subject.Matches(value);
+
+                Assert.Equal(expected, actual);
+            }
+
+            public static IEnumerable<object[]> MatchesTheories()
+            {
+                yield return DataTheory(true,  123, Match.Transform<int, string>(value => (string)null!, Match.Null<string>()));
+                yield return DataTheory(false, 123, Match.Transform<int, string>(value => (string)null!, Match.NotNull<string>()));
+                yield return DataTheory(true,  123, Match.Transform<int, string>(Transformation,         Match.Equal("123")));
+                yield return DataTheory(false, 123, Match.Transform<int, string>(Transformation,         Match.NotEqual("123")));
+            }
+
+            private static string Transformation(int value)
+                => value.ToString(CultureInfo.InvariantCulture);
         }
 
         private static object[] DataTheory(params object[] values)
