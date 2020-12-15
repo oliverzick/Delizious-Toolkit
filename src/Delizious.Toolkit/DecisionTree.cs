@@ -53,14 +53,14 @@ namespace Delizious
             return DecisionTree<TContext, TResult>.Composite(children);
         }
 
-        public static DecisionTree<TContext, TResult> Leaf<TContext, TResult>([NotNull] TResult result)
+        public static DecisionTree<TContext, TResult> Result<TContext, TResult>([NotNull] TResult result)
         {
             if (ReferenceEquals(result, null!))
             {
                 throw new ArgumentNullException(nameof(result));
             }
 
-            return DecisionTree<TContext, TResult>.Leaf(result);
+            return DecisionTree<TContext, TResult>.Result(result);
         }
     }
 
@@ -79,8 +79,8 @@ namespace Delizious
         internal static DecisionTree<TContext, TResult> Composite(IEnumerable<DecisionTree<TContext, TResult>> children)
             => Create(CompositeStrategy.Create(children.Select(child => child.strategy).ToArray()));
 
-        internal static DecisionTree<TContext, TResult> Leaf(TResult result)
-            => Create(LeafStrategy.Create(result));
+        internal static DecisionTree<TContext, TResult> Result(TResult result)
+            => Create(ResultStrategy.Create(result));
 
         public IEnumerable<TResult> All([NotNull] TContext context)
         {
@@ -113,17 +113,17 @@ namespace Delizious
                 => this.children.SelectMany(child => child.Decide(context));
         }
 
-        private sealed class LeafStrategy : IStrategy
+        private sealed class ResultStrategy : IStrategy
         {
             private readonly TResult result;
 
-            private LeafStrategy(TResult result)
+            private ResultStrategy(TResult result)
             {
                 this.result = result;
             }
 
-            public static LeafStrategy Create(TResult result)
-                => new LeafStrategy(result);
+            public static ResultStrategy Create(TResult result)
+                => new ResultStrategy(result);
 
             public IEnumerable<TResult> Decide(TContext context)
             {
