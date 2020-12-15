@@ -9,12 +9,13 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Company />
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.1</FileVersion>
+    <AssemblyVersion>1.1.0</AssemblyVersion>
+    <FileVersion>1.1.0.2</FileVersion>
     <PackageId>Delizious-Toolkit</PackageId>
     <Product>Delizious Toolkit</Product>
     <PackageTags>.net dotnet csharp delizious match matching filtering immutable immutability object-oriented object-functional</PackageTags>
     <Description>An easy to use .NET libary that provides matching of values.</Description>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

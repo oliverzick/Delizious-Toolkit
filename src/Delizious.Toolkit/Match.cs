@@ -966,6 +966,71 @@ namespace Delizious
                 => this.customMatch.Matches(value);
         }
 
+        /// <summary>
+        /// Creates a <see cref="Match{T}"/> instance that transforms a current value into a transformed value first
+        /// using the given <paramref name="transformation"/>
+        /// and then matches the transformed value with the given <paramref name="match"/>.
+        /// </summary>
+        /// <typeparam name="TCurrent">
+        /// The type of the current value to match.
+        /// </typeparam>
+        /// <typeparam name="TTransformed">
+        /// The type of the transformed value to match.
+        /// </typeparam>
+        /// <param name="transformation">
+        /// A transformation function that transforms a current value to match into a transformed value to match.
+        /// This function can return <c>null</c>.
+        /// </param>
+        /// <param name="match">
+        /// The match a transformed value is matched with.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Match{T}"/> instance that transforms a current value into a transformed value first
+        /// using the given <paramref name="transformation"/>
+        /// and then matches the transformed value with the given <paramref name="match"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para><paramref name="transformation"/> is <c>null</c>.</para>
+        /// <para>- or -</para>
+        /// <para><paramref name="match"/> is <c>null</c>.</para>
+        /// </exception>
+        public static Match<TCurrent> Transform<TCurrent, TTransformed>([NotNull] Func<TCurrent, TTransformed> transformation, [NotNull] Match<TTransformed> match)
+        {
+            if (ReferenceEquals(transformation, null!))
+            {
+                throw new ArgumentNullException(nameof(transformation));
+            }
+
+            if (ReferenceEquals(match, null!))
+            {
+                throw new ArgumentNullException(nameof(match));
+            }
+
+            return Match<TCurrent>.Transform(transformation, match);
+        }
+
+        internal static IMatch<TCurrent> Transform<TCurrent, TTransformed>(Func<TCurrent, TTransformed> transformation, IMatch<TTransformed> match)
+            => TransformMatch<TCurrent, TTransformed>.Create(transformation, match);
+
+        private sealed class TransformMatch<TCurrent, TTransformed> : IMatch<TCurrent>
+        {
+            private readonly Func<TCurrent, TTransformed> transformation;
+
+            private readonly IMatch<TTransformed> match;
+
+            private TransformMatch(Func<TCurrent, TTransformed> transformation, IMatch<TTransformed> match)
+            {
+                this.transformation = transformation;
+                this.match = match;
+            }
+
+            public static TransformMatch<TCurrent, TTransformed> Create(Func<TCurrent, TTransformed> transformation, IMatch<TTransformed> match)
+                => new TransformMatch<TCurrent, TTransformed>(transformation, match);
+
+            public bool Matches(TCurrent value)
+                => this.match.Matches(this.transformation(value));
+        }
+
         private sealed class NotMatch<T> : IMatch<T>
         {
             private readonly IMatch<T> match;
@@ -1009,6 +1074,9 @@ namespace Delizious
 
         internal static Match<T> None(IEnumerable<Match<T>> matches)
             => Create(Match.None(matches.Select(item => item.match).ToArray()));
+
+        internal static Match<T> Transform<TTransformed>(Func<T, TTransformed> transformation, Match<TTransformed> match)
+            => Create(Match.Transform(transformation, match.match));
 
         /// <summary>
         /// Determines whether the specified <paramref name="value"/> matches successfully according to this match.
