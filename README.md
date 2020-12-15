@@ -40,6 +40,7 @@ Match | What
 `None` | Matches when a value matches none of the given matches
 `Except` | (**obsolete**) Matches when a value matches none of the given matches
 `Custom` | Matches when a value matches the given custom match
+`Transform` | Transforms a current value into a transformed value first and then matches the transformed value with a given match
 
 ### Sample
 The following sample shows the use of composition to combine different matches:
