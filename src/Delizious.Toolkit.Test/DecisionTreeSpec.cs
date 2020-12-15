@@ -34,20 +34,20 @@ namespace Delizious
 
     public sealed class DecisionTreeSpec
     {
-        public class Root
+        public class Composite
         {
             [Fact]
             public void Throws_exception_when_children_are_null()
             {
-                Assert.Throws<ArgumentNullException>(() => DecisionTree.Root<Context, string>(null!));
+                Assert.Throws<ArgumentNullException>(() => DecisionTree.Composite<Context, string>(null!));
             }
 
             [Fact]
             public void Throws_exception_when_children_contain_null()
             {
-                Assert.Throws<ArgumentException>(() => DecisionTree.Root(DecisionTree.Leaf<Context, string>("1"),
-                                                                         null!,
-                                                                         DecisionTree.Leaf<Context, string>("2")));
+                Assert.Throws<ArgumentException>(() => DecisionTree.Composite(DecisionTree.Leaf<Context, string>("1"),
+                                                                              null!,
+                                                                              DecisionTree.Leaf<Context, string>("2")));
             }
         }
 
@@ -87,22 +87,22 @@ namespace Delizious
                                     Context.Create(),
                                     MakeEnumerable("Test"));
 
-            yield return DataTheory(DecisionTree.Root(DecisionTree.Leaf<Context, string>("One")),
+            yield return DataTheory(DecisionTree.Composite(DecisionTree.Leaf<Context, string>("One")),
                                     Context.Create(),
                                     MakeEnumerable("One"));
 
-            yield return DataTheory(DecisionTree.Root(DecisionTree.Leaf<Context, string>("One"),
-                                                      DecisionTree.Leaf<Context, string>("Two"),
-                                                      DecisionTree.Leaf<Context, string>("Three")),
+            yield return DataTheory(DecisionTree.Composite(DecisionTree.Leaf<Context, string>("One"),
+                                                           DecisionTree.Leaf<Context, string>("Two"),
+                                                           DecisionTree.Leaf<Context, string>("Three")),
                                     Context.Create(),
                                     MakeEnumerable("One", "Two", "Three"));
 
-            yield return DataTheory(DecisionTree.Root(DecisionTree.Root(DecisionTree.Leaf<Context, string>("One"),
-                                                                        DecisionTree.Leaf<Context, string>("Two"),
-                                                                        DecisionTree.Leaf<Context, string>("Three")),
-                                                      DecisionTree.Leaf<Context, string>("Four"),
-                                                      DecisionTree.Root(DecisionTree.Leaf<Context, string>("Five"),
-                                                                        DecisionTree.Leaf<Context, string>("Six"))),
+            yield return DataTheory(DecisionTree.Composite(DecisionTree.Composite(DecisionTree.Leaf<Context, string>("One"),
+                                                                                  DecisionTree.Leaf<Context, string>("Two"),
+                                                                                  DecisionTree.Leaf<Context, string>("Three")),
+                                                           DecisionTree.Leaf<Context, string>("Four"),
+                                                           DecisionTree.Composite(DecisionTree.Leaf<Context, string>("Five"),
+                                                                                  DecisionTree.Leaf<Context, string>("Six"))),
                                     Context.Create(),
                                     MakeEnumerable("One", "Two", "Three", "Four", "Five", "Six"));
         }

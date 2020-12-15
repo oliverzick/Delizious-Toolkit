@@ -38,7 +38,7 @@ namespace Delizious
     /// </summary>
     public static class DecisionTree
     {
-        public static DecisionTree<TContext, TResult> Root<TContext, TResult>([NotNull] params DecisionTree<TContext, TResult>[] children)
+        public static DecisionTree<TContext, TResult> Composite<TContext, TResult>([NotNull] params DecisionTree<TContext, TResult>[] children)
         {
             if (children == null!)
             {
@@ -50,7 +50,7 @@ namespace Delizious
                 throw new ArgumentException("At least one child is a null reference.", nameof(children));
             }
 
-            return DecisionTree<TContext, TResult>.Root(children);
+            return DecisionTree<TContext, TResult>.Composite(children);
         }
 
         public static DecisionTree<TContext, TResult> Leaf<TContext, TResult>([NotNull] TResult result)
@@ -76,8 +76,8 @@ namespace Delizious
         private static DecisionTree<TContext, TResult> Create(IStrategy strategy)
             => new DecisionTree<TContext, TResult>(strategy);
 
-        internal static DecisionTree<TContext, TResult> Root(IEnumerable<DecisionTree<TContext, TResult>> children)
-            => Create(RootStrategy.Create(children.Select(child => child.strategy).ToArray()));
+        internal static DecisionTree<TContext, TResult> Composite(IEnumerable<DecisionTree<TContext, TResult>> children)
+            => Create(CompositeStrategy.Create(children.Select(child => child.strategy).ToArray()));
 
         internal static DecisionTree<TContext, TResult> Leaf(TResult result)
             => Create(LeafStrategy.Create(result));
@@ -97,17 +97,17 @@ namespace Delizious
             IEnumerable<TResult> Decide(TContext context);
         }
 
-        private sealed class RootStrategy : IStrategy
+        private sealed class CompositeStrategy : IStrategy
         {
             private readonly IStrategy[] children;
 
-            private RootStrategy(IStrategy[] children)
+            private CompositeStrategy(IStrategy[] children)
             {
                 this.children = children;
             }
 
-            public static RootStrategy Create(IStrategy[] children)
-                => new RootStrategy(children);
+            public static CompositeStrategy Create(IStrategy[] children)
+                => new CompositeStrategy(children);
 
             public IEnumerable<TResult> Decide(TContext context)
                 => this.children.SelectMany(child => child.Decide(context));
