@@ -34,6 +34,23 @@ namespace Delizious
 
     public sealed class DecisionTreeSpec
     {
+        public class Root
+        {
+            [Fact]
+            public void Throws_exception_when_children_are_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => DecisionTree.Root<Context, int>(null!));
+            }
+
+            [Fact]
+            public void Throws_exception_when_children_contain_null()
+            {
+                Assert.Throws<ArgumentException>(() => DecisionTree.Root<Context, int>(DecisionTree.Leaf<Context, int>(1),
+                                                                                       null!,
+                                                                                       DecisionTree.Leaf<Context, int>(2)));
+            }
+        }
+
         public sealed class Leaf
         {
             [Fact]
@@ -69,6 +86,25 @@ namespace Delizious
             yield return DataTheory(DecisionTree.Leaf<Context, string>("Test"),
                                     Context.Create(),
                                     MakeEnumerable("Test"));
+
+            yield return DataTheory(DecisionTree.Root(DecisionTree.Leaf<Context, string>("One")),
+                                    Context.Create(),
+                                    MakeEnumerable("One"));
+
+            yield return DataTheory(DecisionTree.Root(DecisionTree.Leaf<Context, string>("One"),
+                                                      DecisionTree.Leaf<Context, string>("Two"),
+                                                      DecisionTree.Leaf<Context, string>("Three")),
+                                    Context.Create(),
+                                    MakeEnumerable("One", "Two", "Three"));
+
+            yield return DataTheory(DecisionTree.Root(DecisionTree.Root(DecisionTree.Leaf<Context, string>("One"),
+                                                                        DecisionTree.Leaf<Context, string>("Two"),
+                                                                        DecisionTree.Leaf<Context, string>("Three")),
+                                                      DecisionTree.Leaf<Context, string>("Four"),
+                                                      DecisionTree.Root(DecisionTree.Leaf<Context, string>("Five"),
+                                                                        DecisionTree.Leaf<Context, string>("Six"))),
+                                    Context.Create(),
+                                    MakeEnumerable("One", "Two", "Three", "Four", "Five", "Six"));
         }
 
         private static object[] DataTheory(params object[] values)

@@ -31,12 +31,28 @@ namespace Delizious
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
 
     /// <summary>
     /// Provides static factory methods to create <see cref="DecisionTree{TContext,TResult}"/> instances.
     /// </summary>
     public static class DecisionTree
     {
+        public static DecisionTree<TContext, TResult> Root<TContext, TResult>([NotNull] params DecisionTree<TContext, TResult>[] children)
+        {
+            if (children == null!)
+            {
+                throw new ArgumentNullException(nameof(children));
+            }
+
+            if (children.Any(child => ReferenceEquals(child, null!)))
+            {
+                throw new ArgumentException("At least one child is a null reference.", nameof(children));
+            }
+
+            return DecisionTree<TContext, TResult>.Root(children);
+        }
+
         public static DecisionTree<TContext, TResult> Leaf<TContext, TResult>([NotNull] TResult result)
         {
             if (ReferenceEquals(result, null!))
@@ -60,6 +76,9 @@ namespace Delizious
         private static DecisionTree<TContext, TResult> Create(IStrategy strategy)
             => new DecisionTree<TContext, TResult>(strategy);
 
+        internal static DecisionTree<TContext, TResult> Root(IEnumerable<DecisionTree<TContext, TResult>> children)
+            => Create(RootStrategy.Create(children.Select(child => child.strategy).ToArray()));
+
         internal static DecisionTree<TContext, TResult> Leaf(TResult result)
             => Create(LeafStrategy.Create(result));
 
@@ -76,6 +95,22 @@ namespace Delizious
         private interface IStrategy
         {
             IEnumerable<TResult> Decide(TContext context);
+        }
+
+        private sealed class RootStrategy : IStrategy
+        {
+            private readonly IStrategy[] children;
+
+            private RootStrategy(IStrategy[] children)
+            {
+                this.children = children;
+            }
+
+            public static RootStrategy Create(IStrategy[] children)
+                => new RootStrategy(children);
+
+            public IEnumerable<TResult> Decide(TContext context)
+                => this.children.SelectMany(child => child.Decide(context));
         }
 
         private sealed class LeafStrategy : IStrategy
