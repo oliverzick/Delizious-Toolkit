@@ -53,6 +53,21 @@ namespace Delizious
             return DecisionTree<TContext, TResult>.Composite(children);
         }
 
+        public static DecisionTree<TContext, TResult> Decision<TContext, TResult>([NotNull] Match<TContext> match, [NotNull] DecisionTree<TContext, TResult> child)
+        {
+            if (ReferenceEquals(match, null!))
+            {
+                throw new ArgumentNullException(nameof(match));
+            }
+
+            if (ReferenceEquals(child, null!))
+            {
+                throw new ArgumentNullException(nameof(child));
+            }
+
+            return DecisionTree<TContext, TResult>.Decision(match, child);
+        }
+
         public static DecisionTree<TContext, TResult> Result<TContext, TResult>([NotNull] TResult result)
         {
             if (ReferenceEquals(result, null!))
@@ -78,6 +93,9 @@ namespace Delizious
 
         internal static DecisionTree<TContext, TResult> Composite(IEnumerable<DecisionTree<TContext, TResult>> children)
             => Create(CompositeStrategy.Create(children.Select(child => child.strategy).ToArray()));
+
+        internal static DecisionTree<TContext, TResult> Decision(Match<TContext> match, DecisionTree<TContext, TResult> child)
+            => Create(DecisionStrategy.Create(match, child.strategy));
 
         internal static DecisionTree<TContext, TResult> Result(TResult result)
             => Create(ResultStrategy.Create(result));
@@ -111,6 +129,26 @@ namespace Delizious
 
             public IEnumerable<TResult> Decide(TContext context)
                 => this.children.SelectMany(child => child.Decide(context));
+        }
+
+        private sealed class DecisionStrategy : IStrategy
+        {
+            private readonly Match<TContext> match;
+
+            private readonly IStrategy child;
+
+            private DecisionStrategy(Match<TContext> match, IStrategy child)
+            {
+                this.match = match;
+                this.child = child;
+            }
+
+            public static DecisionStrategy Create(Match<TContext> match, IStrategy child)
+                => new DecisionStrategy(match, child);
+
+            public IEnumerable<TResult> Decide(TContext context)
+                => Enumerable.Repeat(this.child, Convert.ToInt32(this.match.Matches(context)))
+                             .SelectMany(item => item.Decide(context));
         }
 
         private sealed class ResultStrategy : IStrategy

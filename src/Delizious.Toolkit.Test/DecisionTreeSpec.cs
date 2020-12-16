@@ -30,11 +30,12 @@ namespace Delizious
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Xunit;
 
     public sealed class DecisionTreeSpec
     {
-        public class Composite
+        public sealed class Composite
         {
             [Fact]
             public void Throws_exception_when_children_are_null()
@@ -48,6 +49,21 @@ namespace Delizious
                 Assert.Throws<ArgumentException>(() => DecisionTree.Composite(DecisionTree.Result<Context, string>("1"),
                                                                               null!,
                                                                               DecisionTree.Result<Context, string>("2")));
+            }
+        }
+
+        public sealed class Decision
+        {
+            [Fact]
+            public void Throws_exception_when_match_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => DecisionTree.Decision(null!, DecisionTree.Result<Context, string>("1")));
+            }
+
+            [Fact]
+            public void Throws_exception_when_child_is_null()
+            {
+                Assert.Throws<ArgumentNullException>(() => DecisionTree.Decision<Context, string>(Match.Always<Context>(), null!));
             }
         }
 
@@ -79,6 +95,7 @@ namespace Delizious
 
         public static IEnumerable<object[]> AllTheories()
         {
+            // Result strategy
             yield return DataTheory(DecisionTree.Result<Context, string>(string.Empty),
                                     Context.Create(),
                                     MakeEnumerable(string.Empty));
@@ -87,6 +104,30 @@ namespace Delizious
                                     Context.Create(),
                                     MakeEnumerable("Test"));
 
+            // Decision strategy
+            yield return DataTheory(DecisionTree.Decision(Match.Never<Context>(),
+                                                          DecisionTree.Result<Context, string>("One")),
+                                    Context.Create(),
+                                    Enumerable.Empty<string>());
+
+            yield return DataTheory(DecisionTree.Decision(Match.Always<Context>(),
+                                                          DecisionTree.Result<Context, string>("One")),
+                                    Context.Create(),
+                                    MakeEnumerable("One"));
+
+            yield return DataTheory(DecisionTree.Decision(Match.Transform<Context, int>(context => context.IntValue,
+                                                                                        Match.Equal(123)),
+                                                          DecisionTree.Result<Context, string>("One")),
+                                    Context.Create(321),
+                                    Enumerable.Empty<string>());
+
+            yield return DataTheory(DecisionTree.Decision(Match.Transform<Context, int>(context => context.IntValue,
+                                                                                        Match.Equal(123)),
+                                                          DecisionTree.Result<Context, string>("One")),
+                                    Context.Create(123),
+                                    MakeEnumerable("One"));
+
+            // Composite strategy
             yield return DataTheory(DecisionTree.Composite(DecisionTree.Result<Context, string>("One")),
                                     Context.Create(),
                                     MakeEnumerable("One"));
@@ -115,12 +156,15 @@ namespace Delizious
 
         public sealed class Context
         {
-            private Context()
+            private Context(int intValue)
             {
+                this.IntValue = intValue;
             }
 
-            internal static Context Create()
-                => new Context();
+            internal static Context Create(int intValue = default)
+                => new Context(intValue);
+
+            public int IntValue { get; }
         }
     }
 }
