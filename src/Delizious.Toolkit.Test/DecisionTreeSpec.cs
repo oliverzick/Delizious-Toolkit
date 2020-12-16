@@ -86,7 +86,7 @@ namespace Delizious
 
         [Theory]
         [MemberData(nameof(AllTheories))]
-        public void All(DecisionTree<Context, string> subject, Context context, IEnumerable<string> expected)
+        public void All__Evaluates_sequentially(DecisionTree<Context, string> subject, Context context, IEnumerable<string> expected)
         {
             var actual = subject.All(context);
 
@@ -148,23 +148,91 @@ namespace Delizious
                                     MakeEnumerable("One", "Two", "Three", "Four", "Five", "Six"));
         }
 
+        [Theory]
+        [MemberData(nameof(AllTheories__Integration))]
+        public void All__Evaluates_sequentially__Integration(Context context, IEnumerable<string> expected)
+        {
+            var subject = AllSubject__Integration();
+
+            var actual = subject.All(context);
+
+            Assert.Equal(expected, actual);
+        }
+
+        private static DecisionTree<Context, string> AllSubject__Integration()
+            => MakeComposite(MakeDecision(MakeMatch(c => c.IntValue,
+                                                    Match.LessThan(0)),
+                                          MakeComposite(MakeResult("One"),
+                                                        MakeResult("Two"),
+                                                        MakeDecision(MakeMatch(c => c.IntValue,
+                                                                               Match.GreaterThan(-5)),
+                                                                     MakeResult("Three")),
+                                                        MakeResult("Four"),
+                                                        MakeDecision(MakeMatch(c => c.BoolValue,
+                                                                               Match.Equal(false)),
+                                                                     MakeResult("Five")),
+                                                        MakeResult("Six"))
+                                         ),
+                             MakeResult("Seven"),
+                             MakeDecision(MakeMatch(c => c.BoolValue,
+                                                    Match.Equal(true)),
+                                          MakeComposite(MakeDecision(MakeMatch(c => c.IntValue,
+                                                                               Match.GreaterThanOrEqualTo(-2)),
+                                                                     MakeResult("Eight")),
+                                                        MakeResult("Nine"))),
+                             MakeDecision(Match.All(MakeMatch(c => c.BoolValue,
+                                                              Match.Equal(true)),
+                                                    MakeMatch(c => c.IntValue,
+                                                              Match.Equal(0))),
+                                          MakeResult("Ten"))
+                            );
+
+        public static IEnumerable<object[]> AllTheories__Integration()
+        {
+            yield return DataTheory(Context.Create(-5, false), MakeEnumerable("One", "Two", "Four", "Five", "Six", "Seven"));
+            yield return DataTheory(Context.Create(-5, true), MakeEnumerable("One", "Two", "Four", "Six", "Seven", "Nine"));
+
+            yield return DataTheory(Context.Create(-4, false), MakeEnumerable("One", "Two", "Three", "Four", "Five", "Six", "Seven"));
+            yield return DataTheory(Context.Create(-4, true), MakeEnumerable("One", "Two", "Three", "Four", "Six", "Seven", "Nine"));
+
+            yield return DataTheory(Context.Create(-1, false), MakeEnumerable("One", "Two", "Three", "Four", "Five", "Six", "Seven"));
+            yield return DataTheory(Context.Create(-1, true), MakeEnumerable("One", "Two", "Three", "Four", "Six", "Seven", "Eight", "Nine"));
+
+            yield return DataTheory(Context.Create(0, false), MakeEnumerable("Seven"));
+            yield return DataTheory(Context.Create(0, true), MakeEnumerable("Seven", "Eight", "Nine", "Ten"));
+        }
+
         private static object[] DataTheory(params object[] values)
             => values;
 
         private static T[] MakeEnumerable<T>(params T[] items)
             => items;
+        private static DecisionTree<Context, T> MakeComposite<T>(params DecisionTree<Context, T>[] children)
+            => DecisionTree.Composite(children);
+
+        private static DecisionTree<Context, T> MakeDecision<T>(Match<Context> match, DecisionTree<Context, T> child)
+            => DecisionTree.Decision(match, child);
+
+        private static DecisionTree<Context, T> MakeResult<T>(T result)
+            => DecisionTree.Result<Context, T>(result);
+
+        private static Match<Context> MakeMatch<T>(Func<Context, T> transformation, Match<T> match)
+            => Match.Transform(transformation, match);
 
         public sealed class Context
         {
-            private Context(int intValue)
+            private Context(int intValue, bool boolValue)
             {
                 this.IntValue = intValue;
+                this.BoolValue = boolValue;
             }
 
-            internal static Context Create(int intValue = default)
-                => new Context(intValue);
+            internal static Context Create(int intValue = default, bool boolValue = default)
+                => new Context(intValue, boolValue);
 
             public int IntValue { get; }
+
+            public bool BoolValue { get; }
         }
     }
 }
