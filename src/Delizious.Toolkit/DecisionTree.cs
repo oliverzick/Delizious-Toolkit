@@ -38,6 +38,28 @@ namespace Delizious
     /// </summary>
     public static class DecisionTree
     {
+        /// <summary>
+        /// Creates a <see cref="DecisionTree{TContext,TResult}"/> instance that represents a decision tree's composite node
+        /// containing the given <paramref name="children"/>.
+        /// </summary>
+        /// <typeparam name="TContext">
+        /// The type of the decision context that is used to make decision.
+        /// </typeparam>
+        /// <typeparam name="TResult">
+        /// The type of the result this decision tree provides after making decisions.
+        /// </typeparam>
+        /// <param name="children">
+        /// The child nodes of this composite node.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="DecisionTree{TContext,TResult}"/> instance that represents a decision tree's composite node.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///<paramref name="children"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="children"/> contain at least one child that is <c>null</c>.
+        /// </exception>
         public static DecisionTree<TContext, TResult> Composite<TContext, TResult>([NotNull] params DecisionTree<TContext, TResult>[] children)
         {
             if (children == null!)
@@ -53,6 +75,31 @@ namespace Delizious
             return DecisionTree<TContext, TResult>.Composite(children);
         }
 
+        /// <summary>
+        /// Creates a <see cref="DecisionTree{TContext,TResult}"/> instance that represents a decision tree's decision node
+        /// which uses the given <paramref name="match"/> to make a decision and traverses the given <paramref name="child"/>
+        /// when its decision is fulfilled.
+        /// </summary>
+        /// <typeparam name="TContext">
+        /// The type of the decision context that is used to make decision.
+        /// </typeparam>
+        /// <typeparam name="TResult">
+        /// The type of the result this decision tree provides after making decisions.
+        /// </typeparam>
+        /// <param name="match">
+        /// The match that represents the decision of this node.
+        /// </param>
+        /// <param name="child">
+        /// The child node this node traverses after making a decision.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="DecisionTree{TContext,TResult}"/> instance that represents a decision tree's decision node.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para><paramref name="match"/> is <c>null</c>.</para>
+        /// <para>- or -</para>
+        /// <para><paramref name="child"/> is <c>null</c>.</para>
+        /// </exception>
         public static DecisionTree<TContext, TResult> Decision<TContext, TResult>([NotNull] Match<TContext> match, [NotNull] DecisionTree<TContext, TResult> child)
         {
             if (ReferenceEquals(match, null!))
@@ -68,6 +115,25 @@ namespace Delizious
             return DecisionTree<TContext, TResult>.Decision(match, child);
         }
 
+        /// <summary>
+        /// Creates a <see cref="DecisionTree{TContext,TResult}"/> instance that represents a decision tree's result node
+        /// with the given <paramref name="result"/>.
+        /// </summary>
+        /// <typeparam name="TContext">
+        /// The type of the decision context that is used to make decision.
+        /// </typeparam>
+        /// <typeparam name="TResult">
+        /// The type of the result this decision tree provides after making decisions.
+        /// </typeparam>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="DecisionTree{TContext,TResult}"/> instance that represents a decision tree's result node.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///<paramref name="result"/> is <c>null</c>.
+        /// </exception>
         public static DecisionTree<TContext, TResult> Result<TContext, TResult>([NotNull] TResult result)
         {
             if (ReferenceEquals(result, null!))
@@ -79,6 +145,17 @@ namespace Delizious
         }
     }
 
+    /// <summary>
+    /// Represents a decision tree that makes decisions using a given <see cref="TContext"/> instance
+    /// and provides <see cref="TResult"/> instances after making decisions.
+    /// When making decisions this decision tree traverses the given nodes sequentially from parent to child according to the order of declaration.
+    /// </summary>
+    /// <typeparam name="TContext">
+    /// The type of the decision context that is used to make decision.
+    /// </typeparam>
+    /// <typeparam name="TResult">
+    /// The type of the result this decision tree provides after making decisions.
+    /// </typeparam>
     public sealed class DecisionTree<TContext, TResult>
     {
         private readonly IStrategy strategy;
@@ -100,6 +177,18 @@ namespace Delizious
         internal static DecisionTree<TContext, TResult> Result(TResult result)
             => Create(ResultStrategy.Create(result));
 
+        /// <summary>
+        /// Traverses this decision tree and returns all results that fulfill its decisions according to the given <paramref name="context"/>.
+        /// </summary>
+        /// <param name="context">
+        /// The context that is used to make decisions.
+        /// </param>
+        /// <returns>
+        /// All results of this decision tree that fulfill its decision.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="context"/> is <c>null</c>.
+        /// </exception>
         public IEnumerable<TResult> All([NotNull] TContext context)
         {
             if (ReferenceEquals(context, null!))
