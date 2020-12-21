@@ -37,6 +37,7 @@ namespace Delizious
         public static void Run()
         {
             Always();
+            Never();
         }
 
         public static void Always()
@@ -51,10 +52,28 @@ namespace Delizious
 
             var match = Match.Always<short>();
 
-            // Match all short values, result must be true
+            // Match all short values, result must be true because all matches must be true
             var result = EnumerateShort().All(value => match.Matches(value));
 
             Console.WriteLine($"Match all short values with '{nameof(Match.Always)}' match: {result}");
+        }
+
+        public static void Never()
+        {
+            static IEnumerable<short> EnumerateShort()
+            {
+                for (var value = short.MinValue; value < short.MaxValue; value++)
+                {
+                    yield return value;
+                }
+            }
+
+            var match = Match.Never<short>();
+
+            // Match all short values, result must be false because any match must not be true
+            var result = EnumerateShort().Any(value => match.Matches(value));
+
+            Console.WriteLine($"Match all short values with '{nameof(Match.Never)}' match: {result}");
         }
     }
 }
