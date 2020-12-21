@@ -39,16 +39,16 @@ namespace Delizious
             Always();
         }
 
-        private static IEnumerable<short> EnumerateShort()
-        {
-            for (var value = short.MinValue; value < short.MaxValue; value++)
-            {
-                yield return value;
-            }
-        }
-
         public static void Always()
         {
+            static IEnumerable<short> EnumerateShort()
+            {
+                for (var value = short.MinValue; value < short.MaxValue; value++)
+                {
+                    yield return value;
+                }
+            }
+
             var match = Match.Always<short>();
 
             // Match all short values, result must be true
