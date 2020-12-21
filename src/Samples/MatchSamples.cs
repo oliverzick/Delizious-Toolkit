@@ -1,5 +1,5 @@
 ﻿#region Copyright and license
-// <copyright file="Program.cs">
+// <copyright file="MatchSamples.cs">
 //     Copyright (c) 2020 Oliver Zick. All rights reserved.
 // </copyright>
 // <author>Oliver Zick</author>
@@ -26,40 +26,35 @@
 // </license>
 #endregion
 
-[assembly: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Delizious
 {
-    using System;
-    using System.Linq;
-
-    internal class Program
+    internal static class MatchSamples
     {
-        static void Main(string[] args)
+        public static void Run()
         {
-            MatchSamples.Run();
-            //MatchSamples();
+            Always();
         }
 
-        //private static void MatchSamples()
-        //{
-        //    // Match when value <= -1 or value == 2 or (value => 4 and value < 7) or value > 10
-        //    var match = Match.Any(Match.LessThanOrEqualTo(-1),
-        //                          Match.EqualTo(2),
-        //                          Match.All(Match.GreaterThanOrEqualTo(4),
-        //                                    Match.LessThan(7)),
-        //                          Match.GreaterThan(10));
+        private static IEnumerable<short> EnumerateShort()
+        {
+            for (var value = short.MinValue; value < short.MaxValue; value++)
+            {
+                yield return value;
+            }
+        }
 
-        //    var values = Enumerable.Range(-5, 20);
+        public static void Always()
+        {
+            var match = Match.Always<short>();
 
-        //    Console.WriteLine("Match when value <= -1 or value == 2 or (value => 4 and value < 7) or value > 10");
+            // Match all short values, result must be true
+            var result = EnumerateShort().All(value => match.Matches(value));
 
-        //    foreach (var value in values)
-        //    {
-        //        var result = match.Matches(value);
-
-        //        Console.WriteLine($"Match value {value}: {result}");
-        //    }
-        //}
+            Console.WriteLine($"Match all short values with '{nameof(Match.Always)}' match: {result}");
+        }
     }
 }
