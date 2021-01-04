@@ -32,12 +32,13 @@ namespace Delizious
 {
     using System;
     using System.Linq;
-    
+
     internal class Program
     {
         static void Main(string[] args)
         {
             MatchSamples();
+            DecisionTreeSample.Run();
         }
 
         private static void MatchSamples()
