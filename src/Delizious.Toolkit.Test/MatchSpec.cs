@@ -1,6 +1,6 @@
 #region Copyright and license
 // <copyright file="MatchSpec.cs">
-//     Copyright (c) 2020 Oliver Zick. All rights reserved.
+//     Copyright (c) 2020-2021 Oliver Zick. All rights reserved.
 // </copyright>
 // <author>Oliver Zick</author>
 // <license>
