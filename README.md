@@ -186,7 +186,7 @@ Age: 50, Budget: 50000 = Compact, MidSize, FullSize
 ```
 MIT License
 
-Copyright (c) 2020 Oliver Zick
+Copyright (c) 2020-2021 Oliver Zick
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
