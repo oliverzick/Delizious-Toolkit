@@ -12,9 +12,10 @@ If you like or use my work and you are interested in this kind of software devel
 ## Overview
 Delizious Toolkit provides the following features:
 * [Matching of values](#matching-of-values) that is adopted from [Delizious Filtering](https://github.com/oliverzick/Delizious-Filtering) library
+* [Decision trees](#decision-trees)
 
 Upcoming features:
-* Decision trees
+* Undo-Redo engine that is adopted from [ImmutableUndoRedo](https://github.com/oliverzick/ImmutableUndoRedo) library
 
 ## Matching of values
 If you want to get rid of procedural and complex `if-the-else` and `switch` statements to evaluate and match values, the `Match` type is what you are looking for. It lets you easily define value matches in a declarative, configurable and extensible way and comes with the following strategies:
@@ -87,6 +88,96 @@ Match value 11: True
 Match value 12: True
 Match value 13: True
 Match value 14: True
+
+*/
+```
+
+## Decision trees
+Making decisions that goes beyond a boolean result provided by [matching of values](#matching-of-values) is where [decision trees](https://en.wikipedia.org/wiki/Decision_tree) come into the game. This library provides an implementation of a generic decision tree that supports composition, decision and result nodes. You can specify both the decision trees context that is used to make decision and the result it provides. Decisions are specified by matches using a given context.
+
+### Sample
+```csharp
+enum CarType
+{
+    CityCar,
+    Subcompact,
+    Compact,
+    MidSize,
+    FullSize
+}
+
+class Customer
+{
+    public int Age { get; set; }
+
+    public int Budget { get; set; }
+
+    public override string ToString()
+        => $"Age: {this.Age}, Budget: {this.Budget}";
+}
+
+static Match<Customer> MatchProperty<T>(Func<Customer, T> value, Match<T> match)
+    => Match.Transform(value, match);
+
+var decisionTree = DecisionTree.Composite(DecisionTree.Decision(MatchProperty(s => s.Budget,
+                                                                              Match.LessThan(8000)),
+                                                                DecisionTree.Result<Customer, CarType>(CarType.CityCar)),
+
+                                          DecisionTree.Decision(Match.Any(MatchProperty(s => s.Age,
+                                                                                        Match.LessThanOrEqualTo(21)),
+                                                                          MatchProperty(s => s.Budget,
+                                                                                        Match.LessThan(10000))),
+                                                                DecisionTree.Result<Customer, CarType>(CarType.Subcompact)),
+
+                                          DecisionTree.Decision(Match.Always<Customer>(),
+                                                                DecisionTree.Result<Customer, CarType>(CarType.Compact)),
+
+                                          DecisionTree.Decision(Match.Any(
+                                                                          MatchProperty(s => s.Age,
+                                                                                        Match.GreaterThanOrEqualTo(25)),
+                                                                          MatchProperty(s => s.Budget,
+                                                                                        Match.GreaterThanOrEqualTo(25000))),
+                                                                DecisionTree.Result<Customer, CarType>(CarType.MidSize)),
+
+                                          DecisionTree.Decision(MatchProperty(s => s.Budget,
+                                                                              Match.GreaterThanOrEqualTo(50000)),
+                                                                DecisionTree.Result<Customer, CarType>(CarType.FullSize))
+                                         );
+
+var customers = new[]
+                {
+                    new Customer { Age = 18, Budget = 7999 },
+                    new Customer { Age = 18, Budget = 12000 },
+                    new Customer { Age = 21, Budget = 25000 },
+                    new Customer { Age = 22, Budget = 9999 },
+                    new Customer { Age = 22, Budget = 10000 },
+                    new Customer { Age = 24, Budget = 24999 },
+                    new Customer { Age = 24, Budget = 25000 },
+                    new Customer { Age = 25, Budget = 24999 },
+                    new Customer { Age = 50, Budget = 9999 },
+                    new Customer { Age = 50, Budget = 50000 },
+                };
+
+foreach (var customer in customers)
+{
+    var recommendedCarTypes = decisionTree.All(customer);
+
+    var recommendations = string.Join(", ", recommendedCarTypes);
+
+    Console.WriteLine($"{customer} = {recommendations}");
+}
+
+/* Output:
+
+Age: 18, Budget: 12000 = Subcompact, Compact
+Age: 21, Budget: 25000 = Subcompact, Compact, MidSize
+Age: 22, Budget: 9999 = Subcompact, Compact
+Age: 22, Budget: 10000 = Compact
+Age: 24, Budget: 24999 = Compact
+Age: 24, Budget: 25000 = Compact, MidSize
+Age: 25, Budget: 24999 = Compact, MidSize
+Age: 50, Budget: 9999 = Subcompact, Compact, MidSize
+Age: 50, Budget: 50000 = Compact, MidSize, FullSize
 
 */
 ```
