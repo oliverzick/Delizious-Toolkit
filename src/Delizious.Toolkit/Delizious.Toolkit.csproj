@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Authors>Oliver Zick</Authors>
-    <Copyright>Copyright © 2020 Oliver Zick. All rights reserved.</Copyright>
+    <Copyright>Copyright © 2020-2021 Oliver Zick. All rights reserved.</Copyright>
     <RepositoryUrl>https://github.com/oliverzick/Delizious-Toolkit</RepositoryUrl>
     <RootNamespace>Delizious</RootNamespace>
     <Nullable>enable</Nullable>
