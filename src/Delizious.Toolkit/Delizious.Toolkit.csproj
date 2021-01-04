@@ -13,7 +13,7 @@
     <FileVersion>1.3.0.4</FileVersion>
     <PackageId>Delizious-Toolkit</PackageId>
     <Product>Delizious Toolkit</Product>
-    <PackageTags>.net dotnet csharp delizious match matching filtering immutable immutability object-oriented object-functional</PackageTags>
+    <PackageTags>.net dotnet csharp delizious match matching filtering decision decision-tree decision-making immutable immutability object-oriented object-functional</PackageTags>
     <Description>An easy to use .NET libary that provides matching of values.</Description>
     <Version>1.3.0</Version>
   </PropertyGroup>
