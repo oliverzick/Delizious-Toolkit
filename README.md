@@ -93,7 +93,7 @@ Match value 14: True
 ```
 
 ## Decision trees
-Making decisions that goes beyond a boolean result provided by [matching of values](#matching-of-values) is where [decision trees](https://en.wikipedia.org/wiki/Decision_tree) come into the game. This library provides an implementation of a generic decision tree that supports composition, decision and result nodes. You can specify both the decision trees context that is used to make decision and the result it provides. Decisions are specified by matches using a given context.
+Making decisions that goes beyond a boolean result provided by [matching of values](#matching-of-values) is where [decision trees](https://en.wikipedia.org/wiki/Decision_tree) come into the game. This library provides an implementation of a generic `DecisionTree` that supports `Composition`, `Decision` and `Result` nodes. You can specify both the decision trees context that is used to make decisions and the result it provides. Decisions are specified by matches using a given context.
 
 ### Sample
 ```csharp
