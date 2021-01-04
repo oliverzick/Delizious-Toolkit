@@ -1,5 +1,5 @@
 ﻿#region Copyright and license
-// <copyright file="Program.cs">
+// <copyright file="MatchSample.cs">
 //     Copyright (c) 2020-2021 Oliver Zick. All rights reserved.
 // </copyright>
 // <author>Oliver Zick</author>
@@ -26,35 +26,31 @@
 // </license>
 #endregion
 
-[assembly: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-
 namespace Delizious
 {
     using System;
     using System.Linq;
 
-    internal class Program
+    internal sealed class MatchSample
     {
-        static void Main(string[] args)
+        internal static void Run()
         {
-            var samples = new (string Name, Action Action)[]
-                          {
-                              ("Match", MatchSample.Run),
-                              ("Decision Tree", DecisionTreeSample.Run)
-                          };
+            // Match when value <= -1 or value == 2 or (value => 4 and value < 7) or value > 10
+            var match = Match.Any(Match.LessThanOrEqualTo(-1),
+                                  Match.EqualTo(2),
+                                  Match.All(Match.GreaterThanOrEqualTo(4),
+                                            Match.LessThan(7)),
+                                  Match.GreaterThan(10));
 
-            foreach (var sample in samples)
+            var values = Enumerable.Range(-5, 20);
+
+            Console.WriteLine("Match when value <= -1 or value == 2 or (value => 4 and value < 7) or value > 10");
+
+            foreach (var value in values)
             {
-                var count = sample.Name.Length + 8;
-                var delimiterLine = string.Concat(Enumerable.Repeat("=", count));
+                var result = match.Matches(value);
 
-                Console.WriteLine(delimiterLine);
-                Console.WriteLine($"=== {sample.Name} ===");
-                Console.WriteLine(delimiterLine);
-
-                sample.Action();
-
-                Console.WriteLine();
+                Console.WriteLine($"Match value {value}: {result}");
             }
         }
     }
